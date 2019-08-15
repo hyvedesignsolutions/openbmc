@@ -1,0 +1,71 @@
+From 7798f29005f9bd79ffe6c1bba9296c78b7a90925 Mon Sep 17 00:00:00 2001
+From: Brad Chou <bradc@hyvedesignsolutions.com>
+Date: Thu, 15 Aug 2019 17:15:58 +0800
+Subject: [PATCH] ARM: dts: aspeed: hs2500: Enable MAC0 and MAC1.
+
+Enable MAC0 and MAC1 with NCSI support in dts.
+The gpio-hog are also needed to ative PHY chips connected to each MAC.
+---
+ arch/arm/boot/dts/aspeed-bmc-opp-hs2500.dts | 34 +++++++++++++++--------------
+ 1 file changed, 18 insertions(+), 16 deletions(-)
+
+diff --git a/arch/arm/boot/dts/aspeed-bmc-opp-hs2500.dts b/arch/arm/boot/dts/aspeed-bmc-opp-hs2500.dts
+index d2309be..fb8e108 100644
+--- a/arch/arm/boot/dts/aspeed-bmc-opp-hs2500.dts
++++ b/arch/arm/boot/dts/aspeed-bmc-opp-hs2500.dts
+@@ -136,12 +136,19 @@
+ &mac0 {
+ 	status = "okay";
+ 
+-	use-ncsi;
+-
++    use-ncsi;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_rmii1_default>;
+ };
+ 
++&mac1 {
++	status = "okay";
++
++    use-ncsi;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_rgmii2_default>;
++};
++
+ &i2c1 {
+ 	status = "okay";
+ };
+@@ -196,24 +203,19 @@
+ };
+ 
+ &gpio {
+-	nic_func_mode0 {
+-		gpio-hog;
+-		gpios = <ASPEED_GPIO(D, 3) GPIO_ACTIVE_HIGH>;
+-		output-low;
+-		line-name = "nic_func_mode0";
+-	};
+-	nic_func_mode1 {
++	BCM5221_RST {
+ 		gpio-hog;
+ 		gpios = <ASPEED_GPIO(D, 4) GPIO_ACTIVE_HIGH>;
+-		output-low;
+-		line-name = "nic_func_mode1";
++		output-high;
++		line-name = "phy_BCM5221_RST";
+ 	};
+-	seq_cont {
++
++    BCM54612_RST {
+ 		gpio-hog;
+-		gpios = <ASPEED_GPIO(S, 7) GPIO_ACTIVE_HIGH>;
+-		output-low;
+-		line-name = "seq_cont";
+-	};
++		gpios = <ASPEED_GPIO(AA, 7) GPIO_ACTIVE_HIGH>;
++		output-high;
++		line-name = "phy_BCM54612_RST";
++	};	
+ };
+ 
+ &vuart {
