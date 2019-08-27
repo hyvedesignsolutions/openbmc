@@ -40,19 +40,6 @@ ID_LOOKUP = {
 GPIO_CONFIG = {}
 
 
-# FP_PWR_BTN_N
-GPIO_CONFIG['POWER_BUTTON'] = \
-        {'gpio_pin': 'E2', 'direction': 'both'}
-# BMC_NMIBTN_IN_N
-GPIO_CONFIG['RESET_BUTTON'] = \
-        {'gpio_pin': 'E0', 'direction': 'both'}
-
-GPIO_CONFIG['IDBTN'] = \
-    {'gpio_pin': 'S0', 'direction': 'out'}
-
-
-
-
 HWMON_CONFIG = {}
 GPIO_CONFIGS = {}
 

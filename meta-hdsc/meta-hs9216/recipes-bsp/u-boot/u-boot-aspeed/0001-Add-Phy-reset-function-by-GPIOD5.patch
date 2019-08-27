@@ -42,13 +42,13 @@ index e67a4bf..d9e34f6 100644
  int board_init(void)
  {
  	gd->bd->bi_boot_params = CONFIG_SYS_SDRAM_BASE + 0x100;
-@@ -43,6 +70,9 @@ int board_eth_init(bd_t *bd)
- #ifdef CONFIG_ASPEEDNIC
+@@ -36,6 +63,9 @@ int dram_init(void)
+ #ifdef CONFIG_FTGMAC100
  int board_eth_init(bd_t *bd)
  {
 +//Hyve++
 +        reset_phy();
-+//++Hyve
-         return aspeednic_initialize(bd);
++//++Hyve//
+         return ftgmac100_initialize(bd);
  }
  #endif

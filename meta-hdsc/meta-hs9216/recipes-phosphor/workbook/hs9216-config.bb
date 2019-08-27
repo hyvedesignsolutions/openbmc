@@ -6,8 +6,8 @@ inherit allarch
 inherit setuptools
 inherit pythonnative
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://${HYVEBASE}/COPYING.apache-2.0;md5=1dece7821bf3fd70fe1309eaa37d52a2"
-
+LIC_FILES_CHKSUM = "file://${HDSCBASE}/COPYING.apache-2.0;md5=1dece7821bf3fd70fe1309eaa37d52a2"
+#inherit obmc-phosphor-license
 
 PROVIDES += "virtual/obmc-inventory-data"
 RPROVIDES_${PN} += "virtual-obmc-inventory-data"

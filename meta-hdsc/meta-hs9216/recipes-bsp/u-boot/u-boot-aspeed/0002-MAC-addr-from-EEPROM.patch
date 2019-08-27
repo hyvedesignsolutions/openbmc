@@ -612,7 +612,7 @@ index a024308..87d7e92
 +#define CONFIG_SYS_I2C_EEPROM_ADDR  0x50  //7-bit
 +#define CONFIG_SYS_I2C_EEPROM_BUS   6
 +#define CONFIG_SYS_EEPROM_PAGE_WRITE_DELAY_MS 5
-+#define CONFIG_AST_I2C_MAC_OFFSET (0x1F00 - 6)  // start from 1st MAC
++#define CONFIG_AST_I2C_MAC_OFFSET (0x1F00)  // start from 1st MAC
 +
  #endif	/* __AST_COMMON_CONFIG_H */
 diff --git a/include/i2c.h b/include/i2c.h
