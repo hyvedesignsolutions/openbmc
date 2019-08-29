@@ -1,1 +1,1 @@
-FILESEXTRAPATHS_prepend_romulus := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS_prepend_hs2500 := "${THISDIR}/${PN}:"
