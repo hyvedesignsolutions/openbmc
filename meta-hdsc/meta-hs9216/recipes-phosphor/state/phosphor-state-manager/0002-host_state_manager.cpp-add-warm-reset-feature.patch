@@ -1,0 +1,29 @@
+From 9480d299d0fce658dadb64dee7a6da9236b06fee Mon Sep 17 00:00:00 2001
+From: "terry.chang" <terry.chang@mic.com.tw>
+Date: Wed, 12 Sep 2018 23:11:27 +0800
+Subject: [PATCH] host_state_manager.cpp add warm reset feature
+
+---
+ host_state_manager.cpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/host_state_manager.cpp b/host_state_manager.cpp
+index ec1f95f..5c9e3dd 100644
+--- a/host_state_manager.cpp
++++ b/host_state_manager.cpp
+@@ -44,6 +44,7 @@ constexpr auto HOST_STATE_POWERON_TGT = "obmc-host-start@0.target";
+ constexpr auto HOST_STATE_POWERON_MIN_TGT = "obmc-host-startmin@0.target";
+ constexpr auto HOST_STATE_REBOOT_TGT = "obmc-host-reboot@0.target";
+ constexpr auto HOST_STATE_QUIESCE_TGT = "obmc-host-quiesce@0.target";
++constexpr auto HOST_STATE_RESET_TGT = "obmc-chassis-reset@0.target";  //MiTAC, terry add, warm reset
+ 
+ constexpr auto ACTIVE_STATE = "active";
+ constexpr auto ACTIVATING_STATE = "activating";
+@@ -52,6 +53,7 @@ constexpr auto ACTIVATING_STATE = "activating";
+ const std::map<server::Host::Transition, std::string> SYSTEMD_TARGET_TABLE = {
+     {server::Host::Transition::Off, HOST_STATE_SOFT_POWEROFF_TGT},
+     {server::Host::Transition::On, HOST_STATE_POWERON_TGT},
++    {server::Host::Transition::Reset, HOST_STATE_RESET_TGT},              //MiTAC, terry add, warm reset
+     {server::Host::Transition::Reboot, HOST_STATE_REBOOT_TGT}};
+ 
+ constexpr auto SYSTEMD_SERVICE = "org.freedesktop.systemd1";

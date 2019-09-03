@@ -30,7 +30,7 @@
         },
         {
             "name": "RESET_OUT",
-            "pin": "E2",
+            "pin": "E1",
             "direction": "out"
         },
         {

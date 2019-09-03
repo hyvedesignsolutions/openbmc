@@ -1,0 +1,146 @@
+From c0cea64c23b91b8f0e3623c0aad263b329571e4d Mon Sep 17 00:00:00 2001
+From: "terry.chang" <terry.chang@mic.com.tw>
+Date: Fri, 4 Jan 2019 11:46:04 +0800
+Subject: [PATCH] Detect host status by pgood
+ after BMC reset.
+
+- Origin author: Brade
+  The original host_check_main.cpp will send IPMI Heartbeat command to CPU,
+  and check the result to determine if CPU is running.
+  But x86 CPU doesn't suooprt this kind of IPMI Heartbeat command.
+  So, host_check_main_mct.cpp will get the pgood status by D-Bus.
+  If pgood is activate, it assume the host cpu is running.
+
+  Add host_check_main_mct.cpp for MCT OEM to prevent any modification of OpenPower source code.
+
+- Modify by : terry
+  fixed sync code fail. (2019/1/4)
+---
+ Makefile.am             |   2 +-
+ host_check_main_mct.cpp | 104 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 105 insertions(+), 1 deletion(-)
+ create mode 100644 host_check_main_mct.cpp
+
+diff --git a/Makefile.am b/Makefile.am
+index dfbd2cf..f43eea3 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -25,7 +25,7 @@ phosphor_discover_system_state_SOURCES = \
+ 	settings.cpp
+ 
+ phosphor_host_check_SOURCES = \
+-	host_check_main.cpp
++	host_check_main_mct.cpp
+ 
+ generic_cxxflags = \
+ 	$(SYSTEMD_CFLAGS) \
+diff --git a/host_check_main_mct.cpp b/host_check_main_mct.cpp
+new file mode 100644
+index 0000000..1638733
+--- /dev/null
++++ b/host_check_main_mct.cpp
+@@ -0,0 +1,104 @@
++#include <cstdlib>
++#include <unistd.h>
++#include <iostream>
++#include <fstream>
++#include <cstdio>
++#include <sdbusplus/bus.hpp>
++#include <phosphor-logging/log.hpp>
++#include <config.h>
++
++using namespace phosphor::logging;
++
++bool hostRunning = false;
++
++// Determine power status by getting pgood
++void determineInitialState()
++{
++    using sdbusplus::exception::SdBusError;
++
++    sdbusplus::message::variant<int> pgood = -1;
++	int save_pgood = -1;
++    auto bus = sdbusplus::bus::new_default();
++    auto method = bus.new_method_call(
++        "org.openbmc.control.Power", "/org/openbmc/control/power0",
++        "org.freedesktop.DBus.Properties", "Get");
++
++    method.append("org.openbmc.control.Power", "pgood");
++    try
++    {
++        auto reply = bus.call(method);
++        if (reply.is_method_error())
++        {
++            log<level::ERR>(
++                "Error in response message - could not get initial pgood");
++            goto fail;
++        }
++
++        try
++        {
++            reply.read(pgood);
++        }
++        catch (const SdBusError& e)
++        {
++            log<level::ERR>("Error in bus response - bad encoding of pgood",
++                            entry("ERROR=%s", e.what()),
++                            entry("REPLY_SIG=%s", reply.get_signature()));
++            goto fail;
++        }
++		save_pgood = std::get<int>(pgood);
++        if (save_pgood == 1)
++        {
++            log<level::INFO>("Initial Host State will be On");
++            hostRunning = true;
++            return;
++        }
++    }
++    catch (const SdBusError& e)
++    {
++        // It's acceptable for the pgood state service to not be available
++        // since it will notify us of the pgood state when it comes up.
++        if (e.name() != nullptr &&
++            strcmp("org.freedesktop.DBus.Error.ServiceUnknown", e.name()) == 0)
++        {
++            goto fail;
++        }
++
++        // Only log for unexpected error types.
++        log<level::ERR>("Error performing call to get pgood",
++                        entry("ERROR=%s", e.what()));
++        goto fail;
++    }
++
++fail:
++    log<level::INFO>("Initial Host State will be Off");
++    hostRunning = false;
++
++    return;
++}
++
++int main(int argc, char* argv[])
++{
++    log<level::INFO>("Check if host is running");
++
++    determineInitialState();    
++
++    // If host running then create file
++    if (hostRunning)
++    {
++        log<level::INFO>("Host is running!");
++        // Create file for host instance and create in filesystem to indicate
++        // to services that host is running
++        auto size = std::snprintf(nullptr, 0, HOST_RUNNING_FILE, 0);
++        size++; // null
++        std::unique_ptr<char[]> buf(new char[size]);
++        std::snprintf(buf.get(), size, HOST_RUNNING_FILE, 0);
++        std::ofstream outfile(buf.get());
++        outfile.close();
++    }
++    else
++    {
++        log<level::INFO>("Host is not running!");
++    }
++
++    return 0;
++}
