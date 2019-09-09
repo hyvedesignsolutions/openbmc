@@ -4,7 +4,7 @@ Date: Thu, 9 Aug 2018 02:42:55 -0400
 Subject: [PATCH] [Hyve add] 1.Add hs9216 device tree
 
 ---
- arch/arm/boot/dts/aspeed-bmc-hyve-hs9216.dts | 318 +++++++++++++++++++++++++++
+ arch/arm/boot/dts/aspeed-bmc-hyve-hs9216.dts | 326 +++++++++++++++++++++++++++
  1 file changed, 318 insertions(+)
  create mode 100644 arch/arm/boot/dts/aspeed-bmc-hyve-hs9216.dts
 
@@ -13,7 +13,7 @@ new file mode 100644
 index 0000000..baa7434
 --- /dev/null
 +++ b/arch/arm/boot/dts/aspeed-bmc-hyve-hs9216.dts
-@@ -0,0 +1,322 @@
+@@ -0,0 +1,326 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/dts-v1/;
 +
@@ -117,6 +117,8 @@ index 0000000..baa7434
 +};
 +
 +&mac0 {
++        reg = <0x1e680000 0x180>;
++        interrupts = <3>;
 +        status = "okay";
 +        pinctrl-names = "default";
 +        pinctrl-0 = <&pinctrl_rmii1_default>;
@@ -124,6 +126,8 @@ index 0000000..baa7434
 +};
 +
 +&mac1 {
++       reg = <0x1e660000 0x180>;
++       interrupts = <2>;
 +	status = "okay";
 +
 +	pinctrl-names = "default";
