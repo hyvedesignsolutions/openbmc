@@ -4,8 +4,8 @@ Date: Thu, 9 Aug 2018 02:42:55 -0400
 Subject: [PATCH] [Hyve add] 1.Add hs9216 device tree
 
 ---
- arch/arm/boot/dts/aspeed-bmc-hyve-hs9216.dts | 326 +++++++++++++++++++++++++++
- 1 file changed, 318 insertions(+)
+ arch/arm/boot/dts/aspeed-bmc-hyve-hs9216.dts | 375 +++++++++++++++++++++++++++
+ 1 file changed, 370 insertions(+)
  create mode 100644 arch/arm/boot/dts/aspeed-bmc-hyve-hs9216.dts
 
 diff --git a/arch/arm/boot/dts/aspeed-bmc-hyve-hs9216.dts b/arch/arm/boot/dts/aspeed-bmc-hyve-hs9216.dts
@@ -13,7 +13,7 @@ new file mode 100644
 index 0000000..baa7434
 --- /dev/null
 +++ b/arch/arm/boot/dts/aspeed-bmc-hyve-hs9216.dts
-@@ -0,0 +1,326 @@
+@@ -0,0 +1,375 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/dts-v1/;
 +
@@ -43,14 +43,33 @@ index 0000000..baa7434
 +		#size-cells = <1>;
 +		ranges;
 +
++               vga_memory: framebuffer@9f000000 {
++                       no-map;
++                       reg = <0x9f000000 0x01000000>; /* 16M */
++               };
++
++               flash_memory: region@98000000 {
++                       no-map;
++                       reg = <0x98000000 0x02000000>; /* 32M */
++               };
 +		gfx_memory: framebuffer {
 +			size = <0x01000000>;
 +			alignment = <0x01000000>;
 +			compatible = "shared-dma-pool";
 +			reusable;
 +		};
++               video_engine_memory: jpegbuffer {
++                       size = <0x02000000>;    /* 32M */
++                       alignment = <0x01000000>;
++                       compatible = "shared-dma-pool";
++                       reusable;
++               };
 +	};
 +
++       vga-shared-memory {
++               compatible = "aspeed,ast2500-vga-sharedmem";
++               reg = <0x9ff00000 0x100000>;
++       };
 +	iio-hwmon {
 +		compatible = "iio-hwmon";
 +		io-channels = <&adc 0>, <&adc 1>, <&adc 2>, <&adc 3>,
@@ -339,6 +358,36 @@ index 0000000..baa7434
 +	
 +	status = "okay";
 +
++};
++&gfx {
++       status = "okay";
++       memory-region = <&gfx_memory>;
++};
++
++&video {
++       status = "okay";
++       memory-region = <&gfx_memory>;
++};
++
++&vhub {
++       status = "okay";
++};
++&lpc_bmc {
++       compatible = "aspeed,ast2500-lpc-bmc", "simple-mfd", "syscon";
++       reg = <0x0 0x80>;
++       reg-io-width = <4>;
++       #address-cells = <1>;
++    #size-cells = <1>;
++    ranges = <0x0 0x0 0x80>;
++
++       kcs1@0 {
++       compatible = "aspeed,ast2500-kcs-bmc";
++        reg = <0x0 0x80>;
++        interrupts = <8>;
++        kcs_chan = <1>;
++        kcs_addr = <0xca0>;
++               status = "okay";
++       };
 +};
 -- 
 2.7.4
