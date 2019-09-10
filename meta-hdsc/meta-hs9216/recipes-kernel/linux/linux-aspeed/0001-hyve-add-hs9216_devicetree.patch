@@ -135,18 +135,18 @@ index 0000000..baa7434
 +	status = "okay";
 +};
 +
-+&mac0 {
-+        reg = <0x1e680000 0x180>;
-+        interrupts = <3>;
++&mac1 {
++
++
 +        status = "okay";
 +        pinctrl-names = "default";
 +        pinctrl-0 = <&pinctrl_rmii1_default>;
 +        use-ncsi;
 +};
 +
-+&mac1 {
-+       reg = <0x1e660000 0x180>;
-+       interrupts = <2>;
++&mac0 {
++
++
 +	status = "okay";
 +
 +	pinctrl-names = "default";
