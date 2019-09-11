@@ -1,0 +1,88 @@
+From 460c83c622511ea36e64b763ec36605e793c6384 Mon Sep 17 00:00:00 2001
+From: Brad Chou <bradc@hyvedesignsolutions.com>
+Date: Wed, 11 Sep 2019 13:45:11 +0800
+Subject: [PATCH] ARM: dts: aspeed: hs2500: Enable support for SEG701 LED.
+ There is a 7 Segments Display on the HSBUV, all LEDs on this display are
+ controlled by HS2500 GPIOs. This patch enable all LEDs on this display.
+
+---
+ arch/arm/boot/dts/aspeed-bmc-opp-hs2500.dts | 60 +++++++++++++++++++++++++++--
+ 1 file changed, 57 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/dts/aspeed-bmc-opp-hs2500.dts b/arch/arm/boot/dts/aspeed-bmc-opp-hs2500.dts
+index fb8e108..0ebfdf9 100644
+--- a/arch/arm/boot/dts/aspeed-bmc-opp-hs2500.dts
++++ b/arch/arm/boot/dts/aspeed-bmc-opp-hs2500.dts
+@@ -50,15 +50,69 @@
+ 		compatible = "gpio-leds";
+ 
+ 		fault {
+-			gpios = <&gpio ASPEED_GPIO(N, 2) GPIO_ACTIVE_LOW>;
++			gpios = <&gpio ASPEED_GPIO(Y, 1) GPIO_ACTIVE_HIGH>;
+ 		};
+ 
+ 		identify {
+-			gpios = <&gpio ASPEED_GPIO(N, 4) GPIO_ACTIVE_HIGH>;
++			gpios = <&gpio ASPEED_GPIO(Y, 0) GPIO_ACTIVE_HIGH>;
+ 		};
+ 
+ 		power {
+-			gpios = <&gpio ASPEED_GPIO(R, 5) GPIO_ACTIVE_LOW>;
++			gpios = <&gpio ASPEED_GPIO(D, 0) GPIO_ACTIVE_HIGH>;
++		};
++
++		A1 {
++			gpios = <&gpio ASPEED_GPIO(A, 0) GPIO_ACTIVE_HIGH>;
++		};
++
++		B1 {
++			gpios = <&gpio ASPEED_GPIO(A, 1) GPIO_ACTIVE_HIGH>;
++		};
++
++		C1 {
++			gpios = <&gpio ASPEED_GPIO(G, 6) GPIO_ACTIVE_HIGH>;
++		};
++
++		D1 {
++			gpios = <&gpio ASPEED_GPIO(A, 3) GPIO_ACTIVE_HIGH>;
++		};
++
++		E1 {
++			gpios = <&gpio ASPEED_GPIO(D, 2) GPIO_ACTIVE_HIGH>;
++		};
++
++		F1 {
++			gpios = <&gpio ASPEED_GPIO(D, 6) GPIO_ACTIVE_HIGH>;
++		};
++		
++		/* Pin mux with RGMII1_TXD3 */
++		G1 {
++			gpios = <&gpio ASPEED_GPIO(T, 5) GPIO_ACTIVE_HIGH>;
++		};
++
++		A2 {
++			gpios = <&gpio ASPEED_GPIO(H, 0) GPIO_ACTIVE_HIGH>;
++		};
++
++		B2 {
++			gpios = <&gpio ASPEED_GPIO(H, 1) GPIO_ACTIVE_HIGH>;
++		};
++
++		C2 {
++			gpios = <&gpio ASPEED_GPIO(H, 2) GPIO_ACTIVE_HIGH>;
++		};
++
++		D2 {
++			gpios = <&gpio ASPEED_GPIO(G, 7) GPIO_ACTIVE_HIGH>;
++		};
++
++		/* Pin mux with RGMII1RXCTL */
++		E2 {
++			gpios = <&gpio ASPEED_GPIO(U, 5) GPIO_ACTIVE_HIGH>;
++		};
++
++		F2 {
++			gpios = <&gpio ASPEED_GPIO(D, 5) GPIO_ACTIVE_HIGH>;
+ 		};
+ 	};
+ 
