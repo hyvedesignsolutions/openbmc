@@ -52,4 +52,6 @@ RDEPENDS_${PN}-system = " \
         systemd-analyze \
         bmcweb \
         phosphor-webui \
+        entity-manager \
+        intel-ipmi-oem \
         "
