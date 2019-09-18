@@ -1,4 +1,4 @@
-From 460c83c622511ea36e64b763ec36605e793c6384 Mon Sep 17 00:00:00 2001
+From 9ddddae4e48187833730c4c076a28c613a1e30e4 Mon Sep 17 00:00:00 2001
 From: Brad Chou <bradc@hyvedesignsolutions.com>
 Date: Wed, 11 Sep 2019 13:45:11 +0800
 Subject: [PATCH] ARM: dts: aspeed: hs2500: Enable support for SEG701 LED.

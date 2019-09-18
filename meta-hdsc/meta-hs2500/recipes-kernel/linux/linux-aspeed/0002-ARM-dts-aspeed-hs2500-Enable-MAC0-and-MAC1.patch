@@ -1,4 +1,4 @@
-From 32cc1ca7f96d5b573fe3ec473f54970191352911 Mon Sep 17 00:00:00 2001
+From 175201080d2ea906b41183b01859be6b92de753c Mon Sep 17 00:00:00 2001
 From: Brad Chou <bradc@hyvedesignsolutions.com>
 Date: Thu, 15 Aug 2019 17:15:58 +0800
 Subject: [PATCH] ARM: dts: aspeed: hs2500: Enable MAC0 and MAC1.

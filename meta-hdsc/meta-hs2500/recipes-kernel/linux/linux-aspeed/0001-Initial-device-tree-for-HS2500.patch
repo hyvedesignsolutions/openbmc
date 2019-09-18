@@ -1,4 +1,4 @@
-From 651967cf9f206852eabe5a7b07f2633b80d960a5 Mon Sep 17 00:00:00 2001
+From 1472dc8b78f5ffc82c046c0128a974fb5fe126eb Mon Sep 17 00:00:00 2001
 From: Brad Chou <bradc@hyvedesignsolutions.com>
 Date: Thu, 8 Aug 2019 16:07:41 +0800
 Subject: [PATCH] Initial device tree for HS2500.
