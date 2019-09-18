@@ -1,4 +1,4 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
-SRC_URI += "file://0001-hyve-add-hs9216_devicetree.patch \
+SRC_URI += "file://aspeed-bmc-hyve-hs9216.dts;subdir=git/arch/arm/boot/dts \
             file://hs9216.cfg \
            "

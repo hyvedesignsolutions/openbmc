@@ -1,0 +1,372 @@
+// SPDX-License-Identifier: GPL-2.0
+/dts-v1/;
+
+#include "aspeed-g5.dtsi"
+#include <dt-bindings/gpio/aspeed-gpio.h>
+
+/ {
+	model = "HS9216";
+	compatible = "aspeed,ast2500";
+
+	aliases {
+		serial4 = &uart5;
+	};
+
+	chosen {
+		stdout-path = &uart5;
+		bootargs = "console=tty0 console=ttyS4,115200 earlyprintk";
+	};
+
+	memory@80000000 {
+		device_type = "memory";
+		reg = <0x80000000 0x20000000>;
+	};
+
+	reserved-memory {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges;
+
+               vga_memory: framebuffer@9f000000 {
+                       no-map;
+                       reg = <0x9f000000 0x01000000>; /* 16M */
+               };
+
+               flash_memory: region@98000000 {
+                       no-map;
+                       reg = <0x98000000 0x02000000>; /* 32M */
+               };
+		gfx_memory: framebuffer {
+			size = <0x01000000>;
+			alignment = <0x01000000>;
+			compatible = "shared-dma-pool";
+			reusable;
+		};
+               video_engine_memory: jpegbuffer {
+                       size = <0x02000000>;    /* 32M */
+                       alignment = <0x01000000>;
+                       compatible = "shared-dma-pool";
+                       reusable;
+               };
+	};
+
+       vga-shared-memory {
+               compatible = "aspeed,ast2500-vga-sharedmem";
+               reg = <0x9ff00000 0x100000>;
+       };
+	iio-hwmon {
+		compatible = "iio-hwmon";
+		io-channels = <&adc 0>, <&adc 1>, <&adc 2>, <&adc 3>,
+			<&adc 4>, <&adc 5>, <&adc 6>, <&adc 7>,
+			<&adc 8>, <&adc 9>, <&adc 10>, <&adc 11>, <&adc 12>,
+			<&adc 13>, <&adc 14>, <&adc 15>;
+	};
+
+	leds {
+		compatible = "gpio-leds";
+
+		system_fault {
+			label = "System_fault";
+			gpios = <&gpio ASPEED_GPIO(A, 1) GPIO_ACTIVE_LOW>;
+		};
+		EnclosureIdentify {
+			label = "rear_id";
+			gpios = <&gpio ASPEED_GPIO(S, 6) GPIO_ACTIVE_HIGH>;
+		};
+	};
+};
+
+&fmc {
+	status = "okay";
+	flash@0 {
+		status = "okay";
+		m25p,fast-read;
+		label = "bmc";
+#include "openbmc-flash-layout.dtsi"
+	};
+};
+
+&spi1 {
+	status = "okay";
+	flash@0 {
+		status = "okay";
+		m25p,fast-read;
+		label = "pnor";
+	};
+};
+
+&spi2 {
+	status = "okay";
+};
+
+&uart1 {
+	status = "okay";
+};
+
+&uart2 {
+	status = "okay";
+};
+
+&uart3 {
+	status = "okay";
+};
+
+&uart4 {
+	status = "okay";
+};
+
+&uart5 {
+	status = "okay";
+};
+
+&mac1 {
+
+
+        status = "okay";
+        pinctrl-names = "default";
+        pinctrl-0 = <&pinctrl_rmii1_default>;
+        use-ncsi;
+};
+
+&mac0 {
+
+
+	status = "okay";
+
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_rgmii2_default &pinctrl_mdio2_default>;
+};
+
+&i2c0 {
+	status = "okay";
+};
+
+&i2c1 {
+	status = "okay";
+};
+
+&i2c2 {
+	status = "okay";
+};
+
+&i2c3 {
+	status = "okay";
+};
+
+&i2c4 {
+	status = "okay";
+};
+
+&i2c5 {
+	status = "okay";
+};
+
+&i2c6 {
+	status = "okay";
+	bus-frequency = <400000>;
+
+	tmp75@49 {
+		compatible = "ti,tmp75";
+		reg = <0x49>;
+	};
+
+	tmp75@4a {
+		compatible = "ti,tmp75";
+		reg = <0x4a>;
+	};
+
+	eeprom@50 {
+		compatible = "atmel,24c1024";
+		reg = <0x50>;
+		};	
+
+};
+
+&i2c7 {
+	status = "okay";
+};
+
+&i2c8 {
+	status = "okay";
+};
+
+&i2c9 {
+	status = "okay";
+
+	i2c-switch@73 {
+		compatible = "nxp,pca9548";
+		#address-cells = <1>;
+		#size-cells = <0>;
+		reg = <0x73>;
+		i2c-mux-idle-disconnect;  /* may use mux@73 next. */
+
+		i2c_exp0: i2c@0 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <0>;
+		};
+
+		i2c_exp1: i2c@1 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <1>;
+		};
+
+		i2c_exp2: i2c@2 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <2>;
+		};
+
+		i2c_exp3: i2c@3 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <3>;
+		};
+
+		i2c_exp4: i2c@4 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <4>;
+		};
+
+		i2c_exp5: i2c@5 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <5>;
+		};
+
+		i2c_exp6: i2c@6 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <6>;
+		};
+
+		i2c_exp7: i2c@7 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <7>;
+		};
+	};
+};
+
+&i2c10 {
+	status = "okay";
+};
+
+&i2c11 {
+	status = "okay";	
+};
+
+
+&i2c12 {
+	status = "okay";	
+};
+
+&i2c13 {
+	status = "okay";
+};
+
+
+&gfx {
+     status = "okay";
+     memory-region = <&gfx_memory>;
+};
+
+&pwm_tacho {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_pwm0_default &pinctrl_pwm1_default
+			 &pinctrl_pwm2_default &pinctrl_pwm3_default
+			 &pinctrl_pwm4_default &pinctrl_pwm5_default
+			 &pinctrl_pwm6_default &pinctrl_pwm7_default>;
+	fan@0 {
+		reg = <0x00>;
+		aspeed,fan-tach-ch = /bits/ 8 <0x00>;
+	};
+	
+	fan@1 {
+                reg = <0x00>;
+                aspeed,fan-tach-ch = /bits/ 8 <0x01>;
+        };
+
+	fan@2 {
+                reg = <0x01>;
+                aspeed,fan-tach-ch = /bits/ 8 <0x02>;
+        };
+
+	fan@3 {
+                reg = <0x02>;
+                aspeed,fan-tach-ch = /bits/ 8 <0x03>;
+        };
+	
+	fan@4 {
+                reg = <0x03>;
+                aspeed,fan-tach-ch = /bits/ 8 <0x04>;
+        };
+
+	fan@5 {
+                reg = <0x04>;
+                aspeed,fan-tach-ch = /bits/ 8 <0x05>;
+        };
+
+	fan@6 {
+                reg = <0x05>;
+                aspeed,fan-tach-ch = /bits/ 8 <0x06>;
+        };
+
+	fan@7 {
+                reg = <0x06>;
+                aspeed,fan-tach-ch = /bits/ 8 <0x07>;
+        };
+
+	fan@8 {
+                reg = <0x07>;
+                aspeed,fan-tach-ch = /bits/ 8 <0x08>;
+        };
+
+	fan@9 {
+                reg = <0x07>;
+                aspeed,fan-tach-ch = /bits/ 8 <0x09>;
+        };
+
+
+
+};
+
+&adc {
+	
+	status = "okay";
+
+};
+&gfx {
+       status = "okay";
+       memory-region = <&gfx_memory>;
+};
+
+&video {
+       status = "okay";
+       memory-region = <&gfx_memory>;
+};
+
+&vhub {
+       status = "okay";
+};
+&lpc_bmc {
+       compatible = "aspeed,ast2500-lpc-bmc", "simple-mfd", "syscon";
+       reg = <0x0 0x80>;
+       reg-io-width = <4>;
+       #address-cells = <1>;
+    #size-cells = <1>;
+    ranges = <0x0 0x0 0x80>;
+
+       kcs1@0 {
+       compatible = "aspeed,ast2500-kcs-bmc";
+        reg = <0x0 0x80>;
+        interrupts = <8>;
+        kcs_chan = <1>;
+        kcs_addr = <0xca0>;
+               status = "okay";
+       };
+};
+
