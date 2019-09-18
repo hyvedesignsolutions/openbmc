@@ -1,0 +1,53 @@
+From 2c850221c719d09840215b2d06a279e57051b278 Mon Sep 17 00:00:00 2001
+From: Brad Chou <bradc@hyvedesignsolutions.com>
+Date: Wed, 18 Sep 2019 16:03:44 +0800
+Subject: [PATCH] ARM: dts: aspeed: hs2500: Enable I2C channel 0 Enable I2C
+ channel 0. All 13 I2C channels are workable now.
+
+---
+ arch/arm/boot/dts/aspeed-bmc-opp-hs2500.dts | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm/boot/dts/aspeed-bmc-opp-hs2500.dts b/arch/arm/boot/dts/aspeed-bmc-opp-hs2500.dts
+index a0f40b5..20ca94d 100644
+--- a/arch/arm/boot/dts/aspeed-bmc-opp-hs2500.dts
++++ b/arch/arm/boot/dts/aspeed-bmc-opp-hs2500.dts
+@@ -204,6 +204,10 @@
+ 	pinctrl-0 = <&pinctrl_rgmii2_default>;
+ };
+ 
++&i2c0 {
++	status = "okay";
++};
++
+ &i2c1 {
+ 	status = "okay";
+ };
+@@ -225,27 +229,22 @@
+ };
+ 
+ &i2c6 {
+-	/* PCIe slot 1 (x8) */
+ 	status = "okay";
+ };
+ 
+ &i2c7 {
+-	/* PCIe slot 2 (x16) */
+ 	status = "okay";
+ };
+ 
+ &i2c8 {
+-	/* PCIe slot 3 (x16) */
+ 	status = "okay";
+ };
+ 
+ &i2c9 {
+-	/* PCIe slot 4 (x16) */
+ 	status = "okay";
+ };
+ 
+ &i2c10 {
+-	/* PCIe slot 5 (x8) */
+ 	status = "okay";
+ };
+ 
