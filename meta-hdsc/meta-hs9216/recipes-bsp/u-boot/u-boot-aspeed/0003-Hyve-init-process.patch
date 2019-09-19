@@ -1,6 +1,6 @@
 ---
  board/aspeed/ast-g5/ast-g5.c        |   5 +-
- board/aspeed/ast-g5/hyve_oem_init.h | 370 ++++++++++++++++++++++++++++++++++++
+ board/aspeed/ast-g5/hyve_oem_init.h | 374 ++++++++++++++++++++++++++++++++++++
  common/env_common.c                 |   1 +
  3 files changed, 375 insertions(+), 1 deletion(-)
  mode change 100644 => 100755 board/aspeed/ast-g5/ast-g5.c
@@ -37,7 +37,7 @@ new file mode 100644
 index 0000000..dac0c22
 --- /dev/null
 +++ b/board/aspeed/ast-g5/hyve_oem_init.h
-@@ -0,0 +1,370 @@
+@@ -0,0 +1,374 @@
 +#ifndef __HYVE_OEM_INIT__
 +#define __HYVE_OEM_INIT__
 +
@@ -405,6 +405,10 @@ index 0000000..dac0c22
 +	reg32 = *((volatile u_long *) (0x1e78503c));                                                         \
 +	*((volatile ulong *) 0x1e78503c) = reg32 | (1<<24);                                                  \
 +	printf("scu70[%lx] scu8c[%lx]\n", *((volatile u_long *) (0x1e6e2070)), *((volatile u_long *)(0x1e6e208c)));\
++       \      
++       /* Modified uart rounting*/\
++       *((volatile ulong *) 0x1e78909c) = 0x01a00000; /*uart2 <-> uart3*/ \
++       printf("uart routing(0x1e78909c)=%lx\n",*((volatile u_long *) (0x1e78909c)));\
 +	\
 +} while(0)	
 +#endif 

@@ -1,0 +1,2 @@
+FILESEXTRAPATHS_prepend_hs9216 := "${THISDIR}/${PN}:"
+OBMC_CONSOLE_HOST_TTY = "ttyS2"
