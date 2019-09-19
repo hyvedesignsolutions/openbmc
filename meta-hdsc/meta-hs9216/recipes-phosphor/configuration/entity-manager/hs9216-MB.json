@@ -380,6 +380,54 @@
                     }
             ],
             "Type": "TMP75"
+        },
+        {
+            "Address": "0x30",
+            "Bus": 0,
+            "CpuID": 1,
+            "DtsCritOffset": -2.0,
+            "Name": "CPU 1",
+            "Thresholds": [
+                {
+                    "Direction": "greater than",
+                    "Label": "DIMM",
+                    "Name": "upper critical",
+                    "Severity": 1,
+                    "Value": 99
+                },
+                {
+                    "Direction": "greater than",
+                    "Label": "DIMM",
+                    "Name": "upper non critical",
+                    "Severity": 0,
+                    "Value": 89
+                }
+            ],
+            "Type": "XeonCPU"
+        },
+        {
+            "Address": "0x31",
+            "Bus": 0,
+            "CpuID": 2,
+            "DtsCritOffset": -2.0,
+            "Name": "CPU 2",
+            "Thresholds": [
+                {
+                    "Direction": "greater than",
+                    "Label": "DIMM",
+                    "Name": "upper critical",
+                    "Severity": 1,
+                    "Value": 99
+                },
+                {
+                    "Direction": "greater than",
+                    "Label": "DIMM",
+                    "Name": "upper non critical",
+                    "Severity": 0,
+                    "Value": 89
+                }
+            ],
+            "Type": "XeonCPU"
         }
     ],
     "Name": "hs9216 Main Board",
