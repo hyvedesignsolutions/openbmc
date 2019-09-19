@@ -2,8 +2,8 @@
 # These file add version 
 
 python() {
-        d.setVar('VERSION', "v0.00-00-hs9216")
-        d.setVar('VERSION_ID', "v0.00-00-hs9216")
+        d.setVar('VERSION', "v0.02-00-hs9216")
+        d.setVar('VERSION_ID', "v0.02-00-hs9216")
 }
 
 

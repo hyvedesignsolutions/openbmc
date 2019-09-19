@@ -1,7 +1,4 @@
-From fb694f50fd8fb2ae1a1364f4d3c7ccbdb386baed Mon Sep 17 00:00:00 2001
-From: "ray.lue" <ray.lue@mic.com.tw>
-Date: Wed, 10 Apr 2019 14:05:57 +0800
-Subject: [PATCH] [s7106]force scanned fru as ID0 Note: the Intel set FRU ID0
+Subject: [PATCH] force scanned fru as ID0 Note: the Intel set FRU ID0
  dedicated for built-in basebaord fru image,all the other scanned FRU's ID
  will be hashed. If there is no baseboard fru image, the SDR commands can't
  response correctly. this modificaiton walk aroud this issue.
