@@ -59,12 +59,12 @@
         },
         {
             "name": "POWER_BUTTON",
-            "pin": "I3",
+            "pin": "M2",
             "direction": "both"
         },
         {
             "name": "RESET_BUTTON",
-            "pin": "J1",
+            "pin": "M1",
             "direction": "both"
         }
     ]
