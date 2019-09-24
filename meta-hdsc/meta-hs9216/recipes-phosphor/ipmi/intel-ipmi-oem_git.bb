@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=a6a4edad4aed50f39a66d098d74b265b"
 
 SRC_URI = "git://github.com/openbmc/intel-ipmi-oem \
            file://0001-hs9216-disable-Intel-OEM-command.patch \
-           file://0002-hs9216-force-scanned-fru-as-ID0.patch \
+           file://0002-hs9216-force-scanned-fru-from-ID1.patch \
            "
 SRCREV = "147daec5fcfcdacd8813eab6a7735d0f1b615c8a"
 

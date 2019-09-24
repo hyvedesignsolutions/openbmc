@@ -1,0 +1,55 @@
+diff --git a/src/FruDevice.cpp b/src/FruDevice.cpp
+index b20b0d3..0bfae2e 100644
+--- a/src/FruDevice.cpp
++++ b/src/FruDevice.cpp
+@@ -171,7 +171,8 @@ bool validateHeader(const std::array<uint8_t, I2C_SMBUS_BLOCK_MAX>& blockData)
+     // verify pad is set to 0
+     if (blockData[6] != 0x0)
+     {
+-        return false;
++        /*workaround for hs9216*/
++        //return false;
+     }
+
+     // verify offsets are 0, or don't point to another offset
+@@ -954,6 +955,24 @@ void AddFruObjectToDbus(
+     iface->initialize();
+ }
+
++static bool genBaseboardFru()
++{   
++   unsigned char buff[32]={0x01,0x00,0x00,0x01,0x00,0x00,0x00,0xfe,
++                           0x01,0x03,0x00,0x03,0x01,0xaa,0xc4,0x48,
++                           0x59,0x56,0x45,0xc0,0xc0,0xc0,0xc0,0xc1,
++                           0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x8d
++                          };
++
++   FILE *fp;
++   fp = fopen(BASEBOARD_FRU_LOCATION, "wb");
++   fwrite(buff,sizeof(unsigned char),32,fp);
++   fclose(fp);
++
++   return true;
++}
++
++int genflag=0;
++
+ static bool readBaseboardFru(std::vector<char>& baseboardFru)
+ {
+     // try to read baseboard fru from file
+@@ -968,7 +987,14 @@ static bool readBaseboardFru(std::vector<char>& baseboardFru)
+     }
+     else
+     {
+-        return false;
++        if(!genflag)
++        {
++           (genBaseboardFru());
++           return readBaseboardFru(baseboardFru);
++        }else
++        {
++            return false;
++        }
+     }
+     return true;
+ }

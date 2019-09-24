@@ -1,11 +1,9 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
-SRC_URI = "git://github.com/openbmc/entity-manager.git \
-           file://0001-Support-16-bit-FRU-and-workaround-fix-for-pad-error.patch \
-           "
-SRCREV = "c296c80e47ac348a61b5220f9476d7bcd34c546f"
+SRCREV = "155362c341036b528326da2b58067f1f6125e922"
 
-SRC_URI += "file://hs9216-MB.json \
+SRC_URI += "file://0001-workaround-fix-for-fru.patch \
+            file://hs9216-MB.json \
             "
 
 SRC_URI += "file://*.json"

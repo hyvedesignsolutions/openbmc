@@ -1,0 +1,20 @@
+diff --git a/src/storagecommands.cpp b/src/storagecommands.cpp
+index 39405c5..a4c72ad 100644
+--- a/src/storagecommands.cpp
++++ b/src/storagecommands.cpp
+@@ -206,12 +206,15 @@ ipmi_ret_t replaceCacheFru(uint8_t devId)
+         if (fruBus != 0 || fruAddr != 0)
+         {
+             fruHash = hasher(fru.first.str);
++
+             // can't be 0xFF based on spec, and 0 is reserved for baseboard
+             if (fruHash == 0 || fruHash == 0xFF)
+             {
+                 fruHash = 1;
+             }
++            fruHash=1;
+         }
++
+         std::pair<uint8_t, uint8_t> newDev(fruBus, fruAddr);
+
+         bool emplacePassed = false;
