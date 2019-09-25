@@ -428,6 +428,136 @@
                 }
             ],
             "Type": "XeonCPU"
+        },
+        {
+            "Index": 0,
+            "Name": "FAN_0",            
+            "Thresholds": [
+                {
+                    "Direction": "less than",
+                    "Name": "lower critical",
+                    "Severity": 1,
+                    "Value": 1000
+                }
+            ],
+            "Type": "AspeedFan"
+        },
+        {
+            "Index": 1,
+            "Name": "FAN_1",
+            "Thresholds": [
+                {
+                    "Direction": "less than",
+                    "Name": "lower critical",
+                    "Severity": 1,
+                    "Value": 1000
+                }
+            ],
+            "Type": "AspeedFan"
+        },
+        {
+            "Index": 2,
+            "Name": "FAN_2",
+            "Thresholds": [
+                {
+                    "Direction": "less than",
+                    "Name": "lower critical",
+                    "Severity": 1,
+                    "Value": 1000
+                }
+            ],
+            "Type": "AspeedFan"
+        },
+        {
+            "Index": 3,
+            "Name": "FAN_3",
+            "Thresholds": [
+                {
+                    "Direction": "less than",
+                    "Name": "lower critical",
+                    "Severity": 1,
+                    "Value": 1000
+                }
+            ],
+            "Type": "AspeedFan"
+        },
+        {
+            "Index": 4,
+            "Name": "FAN_4",
+            "Thresholds": [
+                {
+                    "Direction": "less than",
+                    "Name": "lower critical",
+                    "Severity": 1,
+                    "Value": 1000
+                }
+            ],
+            "Type": "AspeedFan"
+        },
+        {
+            "Index": 5,
+            "Name": "FAN_5",
+            "Thresholds": [
+                {
+                    "Direction": "less than",
+                    "Name": "lower critical",
+                    "Severity": 1,
+                    "Value": 1000
+                }
+            ],
+            "Type": "AspeedFan"
+        },
+        {
+            "Index": 6,
+            "Name": "FAN_6",
+            "Thresholds": [
+                {
+                    "Direction": "less than",
+                    "Name": "lower critical",
+                    "Severity": 1,
+                    "Value": 1000
+                }
+            ],
+            "Type": "AspeedFan"
+        },
+        {
+            "Index": 7,
+            "Name": "FAN_7",
+            "Thresholds": [
+                {
+                    "Direction": "less than",
+                    "Name": "lower critical",
+                    "Severity": 1,
+                    "Value": 1000
+                }
+            ],
+            "Type": "AspeedFan"
+        },
+        {
+            "Index": 8,
+            "Name": "FAN_8",
+            "Thresholds": [
+                {
+                    "Direction": "less than",
+                    "Name": "lower critical",
+                    "Severity": 1,
+                    "Value": 1000
+                }
+            ],
+            "Type": "AspeedFan"
+        },
+        {
+            "Index": 9,
+            "Name": "FAN_9",
+            "Thresholds": [
+                {
+                    "Direction": "less than",
+                    "Name": "lower critical",
+                    "Severity": 1,
+                    "Value": 1000
+                }
+            ],
+            "Type": "AspeedFan"
         }
     ],
     "Name": "hs9216 Main Board",
