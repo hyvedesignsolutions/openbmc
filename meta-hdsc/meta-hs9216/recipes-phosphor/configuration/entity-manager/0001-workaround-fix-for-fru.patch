@@ -1,8 +1,17 @@
 diff --git a/src/FruDevice.cpp b/src/FruDevice.cpp
-index b20b0d3..0bfae2e 100644
+index b20b0d3..a6394b9 100644
 --- a/src/FruDevice.cpp
 +++ b/src/FruDevice.cpp
-@@ -171,7 +171,8 @@ bool validateHeader(const std::array<uint8_t, I2C_SMBUS_BLOCK_MAX>& blockData)
+@@ -55,6 +55,8 @@ constexpr const char* blacklistPath = PACKAGE_DIR "blacklist.json";
+
+ const static constexpr char* BASEBOARD_FRU_LOCATION =
+     "/etc/fru/baseboard.fru.bin";
++const static constexpr char* BASEBOARD_FRU_DIR =
++    "/etc/fru";
+
+ const static constexpr char* I2C_DEV_LOCATION = "/dev";
+
+@@ -171,7 +173,8 @@ bool validateHeader(const std::array<uint8_t, I2C_SMBUS_BLOCK_MAX>& blockData)
      // verify pad is set to 0
      if (blockData[6] != 0x0)
      {
@@ -12,21 +21,25 @@ index b20b0d3..0bfae2e 100644
      }
 
      // verify offsets are 0, or don't point to another offset
-@@ -954,6 +955,24 @@ void AddFruObjectToDbus(
+@@ -954,6 +957,28 @@ void AddFruObjectToDbus(
      iface->initialize();
  }
 
 +static bool genBaseboardFru()
-+{   
-+   unsigned char buff[32]={0x01,0x00,0x00,0x01,0x00,0x00,0x00,0xfe,
++{
++   unsigned char buff[40]={0x01,0x00,0x00,0x01,0x00,0x00,0x00,0xfe,
 +                           0x01,0x03,0x00,0x03,0x01,0xaa,0xc4,0x48,
-+                           0x59,0x56,0x45,0xc0,0xc0,0xc0,0xc0,0xc1,
-+                           0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x8d
++                           0x59,0x56,0x45,0xc9,0x42,0x41,0x53,0x45,
++                           0x42,0x4f,0x41,0x52,0x44,0xc0,0xc0,0xc0,
++                           0xc1,0x00,0x00,0x00,0x00,0x00,0x00,0x01
 +                          };
-+
 +   FILE *fp;
++   if(access(BASEBOARD_FRU_DIR,0)<0)
++   {
++       mkdir(BASEBOARD_FRU_DIR,700);
++   }
 +   fp = fopen(BASEBOARD_FRU_LOCATION, "wb");
-+   fwrite(buff,sizeof(unsigned char),32,fp);
++   fwrite(buff,sizeof(unsigned char),40,fp);
 +   fclose(fp);
 +
 +   return true;
@@ -37,7 +50,7 @@ index b20b0d3..0bfae2e 100644
  static bool readBaseboardFru(std::vector<char>& baseboardFru)
  {
      // try to read baseboard fru from file
-@@ -968,7 +987,14 @@ static bool readBaseboardFru(std::vector<char>& baseboardFru)
+@@ -968,7 +993,14 @@ static bool readBaseboardFru(std::vector<char>& baseboardFru)
      }
      else
      {
