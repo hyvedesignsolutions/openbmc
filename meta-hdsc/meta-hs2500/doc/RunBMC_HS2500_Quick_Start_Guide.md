@@ -26,15 +26,17 @@ root@hs2500:~#
 HS2500 has no default MAC address. You can set it manually. When there is no MAC address saved, openbmc will generate a random address every time.
 
 ```
-fw_setenv ethaddr 00:11:22:33:44:55
-fw_setenv eth1addr 00:11:22:33:44:66
+fw_setenv ethaddr xx:xx:xx:xx:xx:xx
+fw_setenv eth1addr xx:xx:xx:xx:xx:xx
+reboot
 ```
+After BMC reboot, the MAC address will apply.
 
 ## Get BMC network IP address
-By default, BMC use DHCP to get IP address from DHCP server. The 'ip addr' command will display all ip address.
+By default, BMC use DHCP to get IP address from DHCP server. The 'ip address' command will display all ip address.
 
 ```
-root@hs2500:~# ip addr
+root@hs2500:~# ip address
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
     inet 127.0.0.1/8 scope host lo
@@ -46,13 +48,15 @@ root@hs2500:~# ip addr
     inet 169.254.233.135/16 brd 169.254.255.255 scope link eth0
        valid_lft forever preferred_lft forever
     inet 192.168.1.74/24 brd 192.168.1.255 scope global dynamic eth0
-       valid_lft 82035sec preferred_lft 82035sec
+       valid_lft 86374sec preferred_lft 86374sec
     inet6 fe80::211:22ff:fe33:4477/64 scope link 
        valid_lft forever preferred_lft forever
 3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast qlen 1000
     link/ether 00:11:22:33:44:66 brd ff:ff:ff:ff:ff:ff
     inet 169.254.229.85/16 brd 169.254.255.255 scope link eth1
        valid_lft forever preferred_lft forever
+    inet 192.168.1.57/24 brd 192.168.1.255 scope global dynamic eth1
+       valid_lft 86373sec preferred_lft 86373sec
     inet6 fe80::211:22ff:fe33:4466/64 scope link 
        valid_lft forever preferred_lft forever
 4: sit0@NONE: <NOARP,UP,LOWER_UP> mtu 1480 qdisc noqueue qlen 1000
