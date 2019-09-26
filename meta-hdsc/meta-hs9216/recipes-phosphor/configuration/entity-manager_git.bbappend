@@ -4,6 +4,7 @@ SRCREV = "155362c341036b528326da2b58067f1f6125e922"
 
 SRC_URI += "file://0001-workaround-fix-for-fru.patch \
             file://hs9216-MB.json \
+            file://Delta-DPS-750AB-PSU.json \
             "
 
 SRC_URI += "file://*.json"
