@@ -1,0 +1,5 @@
+DEVPATH=/dev/input/by-path/platform-gpio-keys-event
+KEY=49
+POLARITY=1
+TARGET=lamp-test-button-pressed.service
+EXTRA_ARGS=--continue
