@@ -3,6 +3,7 @@
         {
             "Index": 0,
             "Name": "VOL_SYS_V",
+            "PowerState": "On",
             "ScaleFactor": 0.1124,
             "MaxValue": 5,
             "MinValue": 0,
@@ -25,6 +26,7 @@
         {
             "Index": 1,
             "Name": "VOL_SYS_3_3V",
+            "PowerState": "On",
             "ScaleFactor": 0.410678,
             "MaxValue": 7,
             "MinValue": 0,
@@ -179,6 +181,7 @@
         {
             "Index": 8,
             "Name": "VOL_CPU0_VCORE",
+            "PowerState": "On",
             "ScaleFactor": 0.741602,
             "MaxValue": 18,
             "MinValue": 0,
@@ -201,6 +204,7 @@
         {
             "Index": 9,
             "Name": "VOL_CPU1_VCORE",
+            "PowerState": "On",
             "ScaleFactor": 0.741602,
             "MaxValue": 18,
             "MinValue": 0,
@@ -223,6 +227,7 @@
         {
             "Index": 10,
             "Name": "VOL_DIMM_ABC",
+            "PowerState": "On",
             "ScaleFactor": 1,
             "MaxValue": 2,
             "MinValue": 0,
@@ -245,6 +250,7 @@
         {
             "Index": 11,
             "Name": "VOL_DIMM_DEF",
+            "PowerState": "On",
             "ScaleFactor": 1,
             "MaxValue": 2,
             "MinValue": 0,
@@ -267,6 +273,7 @@
         {
             "Index": 12,
             "Name": "VOL_DIMM_GHJ",
+            "PowerState": "On",
             "ScaleFactor": 1,
             "MaxValue": 2,
             "MinValue": 0,
@@ -289,6 +296,7 @@
         {
             "Index": 13,
             "Name": "VOL_DIMM_KLM",
+            "PowerState": "On",
             "ScaleFactor": 1,
             "MaxValue": 2,
             "MinValue": 0,
@@ -311,6 +319,7 @@
         {
             "Index": 14,
             "Name": "VOL_SYS0_VCCIO",
+            "PowerState": "On",
             "ScaleFactor": 0.741602,
             "MaxValue": 18,
             "MinValue": 0,
@@ -333,6 +342,7 @@
         {
             "Index": 15,
             "Name": "VOL_SYS1_VCCIO",
+            "PowerState": "On",
             "ScaleFactor": 0.741602,
             "MaxValue": 18,
             "MinValue": 0,

@@ -21,3 +21,4 @@ BBLAYERS ?= " \
   ##OEROOT##/meta-hdsc/meta-hs9216 \
   "
 
+BBMASK = "##OEROOT##/meta-phosphor/recipes-extended/rsyslog/rsyslog_%.bbappend"

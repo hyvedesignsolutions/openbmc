@@ -61,20 +61,6 @@
                         "Name": "lower critical",
                         "Severity": 1,
                         "Value": 81.03
-                    },
-                    {
-                        "Direction": "greater than",
-                        "Label": "fan1",
-                        "Name": "upper critical",
-                        "Severity": 1,
-                        "Value": 13500
-                    },
-                    {
-                        "Direction": "less than",
-                        "Label": "fan1",
-                        "Name": "lower critical",
-                        "Severity": 1,
-                        "Value": 800
                     }
                 ],
                 "Type": "pmbus"
