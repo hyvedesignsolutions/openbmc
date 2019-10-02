@@ -1,0 +1,11 @@
+[Unit]
+Description=Update CATERR status
+After=xyz.openbmc_project.processorsensor.service
+Wants=xyz.openbmc_project.processorsensor.service
+
+[Service]
+Type=oneshot
+EnvironmentFile={envfiledir}/obmc/gpio/%I
+ExecStart=/usr/bin/env caterr_update -d $POLARITY
+SyslogIdentifier=caterr_update
+

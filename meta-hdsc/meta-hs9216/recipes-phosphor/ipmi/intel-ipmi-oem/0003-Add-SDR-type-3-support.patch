@@ -1,0 +1,184 @@
+From 6a75b9e952948dad21b2c127e1cb2918c1556e0f Mon Sep 17 00:00:00 2001
+From: Ray Lue <ray.lue@mic.com.tw>
+Date: Thu, 5 Sep 2019 13:43:13 +0800
+Subject: [PATCH] add SDR type 3 support
+
+---
+ include/sdrutils.hpp   | 18 ++++++++-
+ src/sensorcommands.cpp | 88 ++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 104 insertions(+), 2 deletions(-)
+ mode change 100644 => 100755 include/sdrutils.hpp
+ mode change 100644 => 100755 src/sensorcommands.cpp
+
+diff --git a/include/sdrutils.hpp b/include/sdrutils.hpp
+old mode 100644
+new mode 100755
+index 8969bd6..87e1b10
+--- a/include/sdrutils.hpp
++++ b/include/sdrutils.hpp
+@@ -112,7 +112,7 @@ inline static bool getSensorNumMap(std::shared_ptr<SensorNumMap>& sensorNumMap)
+     {
+         return sensorNumMapUpated;
+     }
+-
++    
+     if (!sensorTreeUpdated && sensorNumMapPtr)
+     {
+         sensorNumMap = sensorNumMapPtr;
+@@ -161,6 +161,7 @@ enum class SensorTypeCodes : uint8_t
+     voltage = 0x2,
+     current = 0x3,
+     fan = 0x4,
++    processor = 0x07,
+     other = 0xB,
+ };
+ 
+@@ -170,6 +171,7 @@ const static boost::container::flat_map<const char*, SensorTypeCodes, CmpStr>
+                  {"current", SensorTypeCodes::current},
+                  {"fan_tach", SensorTypeCodes::fan},
+                  {"fan_pwm", SensorTypeCodes::fan},
++                 {"processor", SensorTypeCodes::processor},   
+                  {"power", SensorTypeCodes::other}}};
+ 
+ inline static std::string getSensorTypeStringFromPath(const std::string& path)
+@@ -208,11 +210,19 @@ inline static uint8_t getSensorNumberFromPath(const std::string& path)
+ {
+     std::shared_ptr<SensorNumMap> sensorNumMapPtr;
+     details::getSensorNumMap(sensorNumMapPtr);
++
+     if (!sensorNumMapPtr)
+     {
+         return 0xFF;
+     }
+ 
++#if 0
++    //ray__ print map
++    for (auto& sensor : *sensorNumMapPtr) {
++             std::cerr << sensor.left << " " << sensor.right <<  "\n";
++    }
++#endif 
++
+     try
+     {
+         return sensorNumMapPtr->right.at(path);
+@@ -227,7 +237,11 @@ inline static uint8_t getSensorNumberFromPath(const std::string& path)
+ inline static uint8_t getSensorEventTypeFromPath(const std::string& path)
+ {
+     // TODO: Add support for additional reading types as needed
+-    return 0x1; // reading type = threshold
++    //return 0x1; // reading type = threshold
++    uint8_t selType = getSensorTypeFromPath(path);
++    
++    return ((selType > 0x04) && (selType != 0x0b)) ? 0x6f:0x1;
++   
+ }
+ 
+ inline static std::string getPathFromSensorNumber(uint8_t sensorNum)
+diff --git a/src/sensorcommands.cpp b/src/sensorcommands.cpp
+old mode 100644
+new mode 100755
+index b24ac7e..4fd97df
+--- a/src/sensorcommands.cpp
++++ b/src/sensorcommands.cpp
+@@ -1145,6 +1145,34 @@ ipmi::RspType<uint16_t> ipmiStorageReserveSDR()
+     return ipmi::responseSuccess(sdrReservationID);
+ }
+ 
++//MCT hook for event only SDR
++struct SensorDataEventOnlyRecordBody
++{
++    uint8_t entity_id;
++    uint8_t entity_instance;
++    uint8_t sensor_type;
++    uint8_t event_reading_type;
++    uint8_t sensor_driection[2];          // no macro support
++    uint8_t reserved;
++    uint8_t oem_reserved;
++    uint8_t id_string_info;
++    char id_string[FULL_RECORD_ID_STR_MAX_LENGTH];
++} __attribute__((packed));
++
++
++struct SensorDataEventOnlyRecord
++{
++    get_sdr::SensorDataRecordHeader header;
++    get_sdr::SensorDataRecordKey key;
++    SensorDataEventOnlyRecordBody body;
++} __attribute__((packed));
++
++/** @struct SensorDataFruRecord
++ *
++ *  FRU Device Locator Record - SDR Type 03
++ */
++
++
+ ipmi::RspType<uint16_t,            // next record ID
+               std::vector<uint8_t> // payload
+               >
+@@ -1237,6 +1265,66 @@ ipmi::RspType<uint16_t,            // next record ID
+         return ipmi::responseResponseError();
+     }
+     uint8_t sensornumber = (recordID & 0xFF);
++
++    //MCT event only hook
++    if(getSensorEventTypeFromPath(path) == 0x6f)
++    {
++        SensorDataEventOnlyRecord record = {0};
++        record.header.record_id_msb = recordID << 8;
++        record.header.record_id_lsb = recordID & 0xFF;
++        record.header.sdr_version = ipmiSdrVersion;
++        record.header.record_type = 0x03; 
++        record.header.record_length = sizeof(SensorDataEventOnlyRecord) -
++                                      sizeof(get_sdr::SensorDataRecordHeader); 
++
++        record.key.owner_id = 0x20;
++        record.key.owner_lun = 0x0;
++        record.key.sensor_number = sensornumber;
++
++        record.body.entity_id = 0x0;
++        record.body.entity_instance = 0x01;
++        record.body.sensor_type = getSensorTypeFromPath(path);
++        record.body.event_reading_type = 0x6f;
++
++        // populate sensor name from path
++        std::string name;
++        size_t nameStart = path.rfind("/");
++        if (nameStart != std::string::npos)
++        {
++            name = path.substr(nameStart + 1, std::string::npos - nameStart);
++        }
++
++        std::replace(name.begin(), name.end(), '_', ' ');
++        if (name.size() > FULL_RECORD_ID_STR_MAX_LENGTH)
++        {
++            // try to not truncate by replacing common words
++            constexpr std::array<std::pair<const char *, const char *>, 2>
++            replaceWords = {std::make_pair("Output", "Out"),
++                            std::make_pair("Input", "In")};
++            for (const auto &[find, replace] : replaceWords)
++            {
++                boost::replace_all(name, find, replace);
++            }
++
++            name.resize(FULL_RECORD_ID_STR_MAX_LENGTH);
++        }
++        record.body.id_string_info = name.size();
++        std::strncpy(record.body.id_string, name.c_str(),
++                    sizeof(record.body.id_string));
++
++       if (sizeof(SensorDataEventOnlyRecord) < (offset + bytesToRead))
++        {
++            bytesToRead = sizeof(SensorDataEventOnlyRecord) - offset;
++        }
++
++        uint8_t *respStart = reinterpret_cast<uint8_t *>(&record) + offset;
++        std::vector<uint8_t> recordData(respStart, respStart + bytesToRead);
++
++        return ipmi::responseSuccess(nextRecordId, recordData); 
++        
++        
++    }
++    
+     get_sdr::SensorDataFullRecord record = {0};
+ 
+     record.header.record_id_msb = recordID << 8;

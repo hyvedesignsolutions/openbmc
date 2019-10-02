@@ -74,6 +74,14 @@
 			gpios = <&gpio ASPEED_GPIO(S, 6) GPIO_ACTIVE_HIGH>;
 		};
 	};
+        gpio-keys {
+                    compatible = "gpio-keys";
+                    caterr {
+                                  label = "caterr";
+                                  gpios = <&gpio ASPEED_GPIO(G, 1) GPIO_ACTIVE_LOW>;
+                                  linux,code = <ASPEED_GPIO(G, 1)>;
+                     };
+        };
 };
 
 &fmc {

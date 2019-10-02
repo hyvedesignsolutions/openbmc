@@ -1,0 +1,46 @@
+From b621ad429662ae7b652cf13bccb34ff9ace6abf8 Mon Sep 17 00:00:00 2001
+From: jeannie <jeannie@localhost.localdomain>
+Date: Fri, 22 Mar 2019 12:24:34 +0800
+Subject: [PATCH] Add interface for caterr logging
+
+---
+ xyz/openbmc_project/Control/Processor.interface.yaml | 20 ++++++++++++++++++++
+ .../Control/Processor/CPUError.errors.yaml           |  3 +++
+ 2 files changed, 23 insertions(+)
+ create mode 100644 xyz/openbmc_project/Control/Processor.interface.yaml
+ create mode 100644 xyz/openbmc_project/Control/Processor/CPUError.errors.yaml
+
+diff --git a/xyz/openbmc_project/Control/Processor.interface.yaml b/xyz/openbmc_project/Control/Processor.interface.yaml
+new file mode 100644
+index 0000000..d5c35bc
+--- /dev/null
++++ b/xyz/openbmc_project/Control/Processor.interface.yaml
+@@ -0,0 +1,19 @@
++description: >
++    This defines processor status
++
++properties:
++    - name: ProcessorStatus
++      type: enum[self.State]
++      description: >
++          The upper bound of the critical threshold.
++enumerations:
++    - name: State
++      description: >
++        The current state of the processor.
++      values:
++        - name: NORMAL
++          description: >
++            Processor in normal state.
++        - name: CATERR
++          description: >
++            Processor in CATTERR state.
+diff --git a/xyz/openbmc_project/Control/Processor/CPUError.errors.yaml b/xyz/openbmc_project/Control/Processor.errors.yaml
+new file mode 100644
+index 0000000..04ef73e
+--- /dev/null
++++ b/xyz/openbmc_project/Control/Processor.errors.yaml
+@@ -0,0 +1,3 @@
++#xyz.openbmc_project.Control.Processor.CATERR
++- name: CATERR
++  description: cpu CATERR occur. 
