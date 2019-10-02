@@ -281,41 +281,27 @@
 &pwm_tacho {
 	status = "okay";
 	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_pwm0_default &pinctrl_pwm1_default>;
+	pinctrl-0 = <&pinctrl_pwm0_default &pinctrl_pwm1_default
+        &pinctrl_pwm2_default &pinctrl_pwm3_default>;
 
 	fan@0 {
 		reg = <0x00>;
-		aspeed,fan-tach-ch = /bits/ 8 <0x08>;
+		aspeed,fan-tach-ch = /bits/ 8 <0x00>;
 	};
 
 	fan@1 {
-		reg = <0x00>;
-		aspeed,fan-tach-ch = /bits/ 8 <0x09>;
+		reg = <0x01>;
+		aspeed,fan-tach-ch = /bits/ 8 <0x01>;
 	};
 
 	fan@2 {
-		reg = <0x01>;
-		aspeed,fan-tach-ch = /bits/ 8 <0x0a>;
+		reg = <0x02>;
+		aspeed,fan-tach-ch = /bits/ 8 <0x02>;
 	};
 
 	fan@3 {
-		reg = <0x01>;
-		aspeed,fan-tach-ch = /bits/ 8 <0x0b>;
-	};
-
-	fan@4 {
-		reg = <0x00>;
-		aspeed,fan-tach-ch = /bits/ 8 <0x0c>;
-	};
-
-	fan@5 {
-		reg = <0x00>;
-		aspeed,fan-tach-ch = /bits/ 8 <0x0d>;
-	};
-
-	fan@6 {
-		reg = <0x01>;
-		aspeed,fan-tach-ch = /bits/ 8 <0x0e>;
+		reg = <0x03>;
+		aspeed,fan-tach-ch = /bits/ 8 <0x03>;
 	};
 };
 
