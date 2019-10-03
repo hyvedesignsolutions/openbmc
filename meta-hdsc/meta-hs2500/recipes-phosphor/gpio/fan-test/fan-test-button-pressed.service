@@ -1,0 +1,7 @@
+[Unit]
+Description=Fan Test Button Pressed Service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/env toggle_fan_speed.sh
+SyslogIdentifier=fan-test-button

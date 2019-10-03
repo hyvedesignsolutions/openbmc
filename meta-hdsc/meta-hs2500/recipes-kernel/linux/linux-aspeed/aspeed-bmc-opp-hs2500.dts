@@ -124,6 +124,12 @@
 			gpios = <&gpio ASPEED_GPIO(G, 1) GPIO_ACTIVE_LOW>;
 			linux,code = <ASPEED_GPIO(G, 1)>;
 		};
+
+		fan-test {
+			label = "fan-test";
+			gpios = <&gpio ASPEED_GPIO(G, 4) GPIO_ACTIVE_LOW>;
+			linux,code = <ASPEED_GPIO(G, 4)>;
+		};
 	};
 
 	iio-hwmon {
