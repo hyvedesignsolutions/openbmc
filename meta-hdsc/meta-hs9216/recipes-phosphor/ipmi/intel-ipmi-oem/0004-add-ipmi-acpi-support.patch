@@ -1,0 +1,29 @@
+From b973489e455784db9fa7bd48ca164c59d0d04d2c Mon Sep 17 00:00:00 2001
+From: Jeannie Wu <jeanniew@hyvedesignsolutions.com>
+Date: Fri, 4 Oct 2019 16:14:03 +0800
+Subject: [PATCH] add ipmi acpi support
+
+---
+ include/sdrutils.hpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/include/sdrutils.hpp b/include/sdrutils.hpp
+index 87e1b10..0784537 100755
+--- a/include/sdrutils.hpp
++++ b/include/sdrutils.hpp
+@@ -162,6 +162,7 @@ enum class SensorTypeCodes : uint8_t
+     current = 0x3,
+     fan = 0x4,
+     processor = 0x07,
++    acpi = 0x22,
+     other = 0xB,
+ };
+ 
+@@ -172,6 +173,7 @@ const static boost::container::flat_map<const char*, SensorTypeCodes, CmpStr>
+                  {"fan_tach", SensorTypeCodes::fan},
+                  {"fan_pwm", SensorTypeCodes::fan},
+                  {"processor", SensorTypeCodes::processor},   
++                 {"acpi", SensorTypeCodes::acpi},
+                  {"power", SensorTypeCodes::other}}};
+ 
+ inline static std::string getSensorTypeStringFromPath(const std::string& path)
