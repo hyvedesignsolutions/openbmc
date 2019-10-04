@@ -1,13 +1,13 @@
 diff --git a/src/FanMain.cpp b/src/FanMain.cpp
-index eeface8..d558208 100644
+index 7c5b60a..9d6f2ca 100644
 --- a/src/FanMain.cpp
 +++ b/src/FanMain.cpp
-@@ -261,7 +261,7 @@ void createSensors(
-             redundancy = &systemRedundancy;
-         }
+@@ -270,7 +270,7 @@ void createSensors(
+                     redundancy = &systemRedundancy;
+                 }
 
--        constexpr double defaultMaxReading = 25000;
-+        constexpr double defaultMaxReading = 25500;
-         constexpr double defaultMinReading = 0;
-         auto limits = std::make_pair(defaultMinReading, defaultMaxReading);
-
+-                constexpr double defaultMaxReading = 25000;
++                constexpr double defaultMaxReading = 25500;
+                 constexpr double defaultMinReading = 0;
+                 auto limits =
+                     std::make_pair(defaultMinReading, defaultMaxReading);

@@ -1,3 +1,5 @@
+SRCREV = "2adc95cb4d9ac879f66aa9ef12a6ce8b7c1578fe"
+
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 SRC_URI += "file://0001-modfiied-fan-MaxReading.patch \
             file://0002-modified-psusensor.patch \
@@ -5,3 +7,4 @@ SRC_URI += "file://0001-modfiied-fan-MaxReading.patch \
             "
 
 SYSTEMD_SERVICE_${PN} += " xyz.openbmc_project.processorsensor.service"
+SYSTEMD_SERVICE_${PN} += " xyz.openbmc_project.acpisensor.service"
