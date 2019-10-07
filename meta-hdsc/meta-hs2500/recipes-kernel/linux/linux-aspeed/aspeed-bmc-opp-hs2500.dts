@@ -70,7 +70,8 @@
 		};
 
 		C1 {
-			gpios = <&gpio ASPEED_GPIO(G, 6) GPIO_ACTIVE_HIGH>;
+			// Pin mux with NCTS3
+			gpios = <&gpio ASPEED_GPIO(E, 0) GPIO_ACTIVE_HIGH>;
 		};
 
 		D1 {
