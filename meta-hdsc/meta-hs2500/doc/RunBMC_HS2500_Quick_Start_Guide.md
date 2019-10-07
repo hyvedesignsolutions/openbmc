@@ -32,7 +32,7 @@ reboot
 ```
 After BMC reboot, the MAC address will apply.
 
-## Get BMC network IP address
+## BMC network IP address
 By default, BMC use DHCP to get IP address from DHCP server. The 'ip address' command will display all ip address.
 
 ```
@@ -63,9 +63,28 @@ root@hs2500:~# ip address
     link/sit 0.0.0.0 brd 0.0.0.0
 ```
 
+OpenBMC support IP aliases, so you can assign multiple IP address to a network interface.
+For example, to add another IP "192.168.1.75" to eth0.
+
+```
+root@hs2500:~# ip address add 192.168.1.75/24 dev eth0
+root@hs2500:~# ip address show eth0
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast qlen 1000
+    link/ether 00:11:22:33:44:55 brd ff:ff:ff:ff:ff:ff
+    inet 169.254.87.164/16 brd 169.254.255.255 scope link eth0
+       valid_lft forever preferred_lft forever
+    inet 192.168.1.74/24 brd 192.168.1.255 scope global dynamic eth0
+       valid_lft 85432sec preferred_lft 85432sec
+    inet 192.168.1.75/24 scope global secondary eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::211:22ff:fe33:4455/64 scope link 
+       valid_lft forever preferred_lft forever
+```
+
 ## BMC firmware update
 BMC firmware can be updated if there is a file named 'image-bmc' in the /run/initramfs/ directory.
 You can copy BMC firmware by scp command from your host.
+The file name must be called ***image-bmc***
 
 ```
 export server=10.19.84.81
@@ -84,17 +103,18 @@ busctl call `mapper get-service /xyz/openbmc_project/led/groups/lamp_test` \
 Set ssv xyz.openbmc_project.Led.Group Asserted b true
 ```
 
-## Power, Reset and ID buttons
-Before doing this test, connect J2002 pin #3 and pin #4 together by a jumper to let BMC sense correct power status.
+## Buttons
+Before doing power on/off test, connect J2002 pin #3 and pin #4 together by a jumper to let BMC sense correct power status.
 There are 8 buttons on the HS2500, as described here:
 
 | Button | Name | Action |
 | ------ | ---- | ------ |
+| SW701 | ID | Toggle to identify LED |
+| SW702 | Reset | Toggle to reset host |
 | SW703 | Power | Toggle host power on / off |
 |       |       | Long press to force power off |
-| SW702 | Reset | Toggle to reset host |
-| SW701 | ID | Toggle to identify LED |
-
+| SW704 | LED Test | Blink all LEDs |
+| SW705 | Fan Test | Toggle FAN PWM between 50% and 100% duty |
 
 ## I2C Device Detect
 There are 12 I2C buses on the HS2500. The 'i2cdetect' can scan all available devices on a given i2c bus and display the slave address. For example, to detect devices on i2c10
@@ -114,8 +134,8 @@ root@hs2500:~# i2cdetect -y 10
 
 All available slave devices are described in this table.
 
-| Bus Number | Slave Address | Device Name |
-|------------|---------------|-------------|
+| Bus Number | Slave Address | Device Name | EVT Build |
+|------------|---------------|-------------|-----|
 | 0 | N/A | N/A |
 | 1 | N/A | N/A |
 | 2 | N/A | N/A |
@@ -130,8 +150,32 @@ All available slave devices are described in this table.
 |   | 38 | PCA9554 |
 |   | 40 | INA219AID |
 |   | 41 | INA219AID |
-| 11 | 48 | AT24C64D-SSHM-T |
+| 11 | 48 | TMP75AIDGK |
 |   | 70 | PCA9548 |
+| 12 | 4a | TMP75AIDGK |
+|   | 51 | M24C64-RDW6TP |
+
+| Bus Number | Slave Address | Device Name | PVT Build |
+|------------|---------------|-------------|-----|
+| 0 | N/A | N/A |
+| 1 | N/A | N/A |
+| 2 | N/A | N/A |
+| 3 | 50 | AT24C64D-SSHM-T |
+| 4 | N/A | N/A |
+| 5 | N/A | N/A |
+| 6 | N/A | N/A |
+| 7 | N/A | N/A |
+| 8 | 4a | TMP75AIDGK |
+|   | 51 | M24C64-RDW6TP |
+| 9 | 20 | TPM SLB9645TT12FW13332XUMA1 |
+| 10 | 21 | TCA9555 |
+|   | 38 | PCA9554 |
+|   | 40 | INA219AID |
+|   | 41 | INA219AID |
+| 11 | 48 | TMP75AIDGK |
+|   | 70 | PCA9548 |
+| 12 | N/A | N/A |
+
 
 ## Read ADC Voltage
 There are 8 ADC channels on HS2500.
@@ -154,4 +198,21 @@ in5_input | 0 ~ 1798 | +- 18|
 in6_input | 0 ~ 1798 | +- 18|
 in7_input | 0 ~ 1798 | +- 18|
 in8_input | 0 ~ 1798 | +- 18|
+
+## Fan Tach and PWM
+There 4 fan tach and PWM on the HSBUV. All of them can be read/write by sysfs in /sys/class/hwmon/hwmon0.
+For example, to read fan1 speed :
+
+```
+root@hs2500:~# cat /sys/class/hwmon/hwmon0/fan1_input 
+23993
+```
+
+To set the fan1 PWM to 50% duty :
+
+```
+root@hs2500:~# echo 127 > /sys/class/hwmon/hwmon0/pwm1
+```
+
+The available range of PWM is between 0 ~ 255, which is mapping to duty cycle 0% ~ 100%.
 
