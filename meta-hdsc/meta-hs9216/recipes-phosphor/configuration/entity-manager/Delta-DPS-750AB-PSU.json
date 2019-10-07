@@ -42,13 +42,6 @@
                         "Value": 12.625
                     },
                     {
-                        "Direction": "less than",
-                        "Label": "vout1",
-                        "Name": "lower critical",
-                        "Severity": 1,
-                        "Value": 11.375
-                    },
-                    {
                         "Direction": "greater than",
                         "Label": "vin",
                         "Name": "upper critical",
