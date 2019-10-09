@@ -216,3 +216,184 @@ root@hs2500:~# echo 127 > /sys/class/hwmon/hwmon0/pwm1
 
 The available range of PWM is between 0 ~ 255, which is mapping to duty cycle 0% ~ 100%.
 
+## OpenBMC REST API
+The primary management interface for OpenBMC is REST. This document provides some basic structure and usage examples for the REST interface.
+The REST API is for BMC out of band management, so you should connect BMC to a network and send commands by curl from another host.
+
+### Authentication
+This tutorial uses the basic authentication URL encoding, so just pass in the user name and password as part of the URL and no separate login/logout commands are required:
+
+```
+export bmc=<username>:<password>@<bmcip>
+```
+
+### HTTP GET operations & URL structure
+- To query the attributes of an object, perform a GET request on the objectname, with no trailing slash. For example:
+
+      $ curl -k https://${bmc}/xyz/openbmc_project/user
+      {
+      "data": {
+         "AccountUnlockTimeout": 0,
+         "AllGroups": [
+            "ipmi",
+            "redfish",
+            "ssh",
+            "web"
+         ],
+         "AllPrivileges": [
+            "priv-admin",
+            "priv-operator",
+            "priv-user",
+            "priv-callback"
+         ],
+         "MaxLoginAttemptBeforeLockout": 0,
+         "MinPasswordLength": 8,
+         "RememberOldPasswordTimes": 0
+      },
+      "message": "200 OK",
+      "status": "ok"
+      }
+
+- To query a single attribute, use the `attr/<name>` path. Using the `user` object from above, we can query just the `MinPasswodLength` value:
+
+      $ curl -k https://${bmc}/xyz/openbmc_project/user/attr/MinPasswodLength
+      {
+      "data": 8,
+      "message": "200 OK",
+      "status": "ok"
+      }
+
+- When a path has a trailing-slash, the response will list the sub objects of
+   the URL. For example, using the same object path as above, but adding a
+   slash:
+
+         $ curl -k https://${bmc}/xyz/openbmc_project/
+         {
+         "data": [
+            "/xyz/openbmc_project/Chassis",
+            "/xyz/openbmc_project/Ipmi",
+            "/xyz/openbmc_project/certs",
+            "/xyz/openbmc_project/console",
+            "/xyz/openbmc_project/control",
+            "/xyz/openbmc_project/dump",
+            "/xyz/openbmc_project/events",
+            "/xyz/openbmc_project/inventory",
+            "/xyz/openbmc_project/ipmi",
+            "/xyz/openbmc_project/led",
+            "/xyz/openbmc_project/logging",
+            "/xyz/openbmc_project/network",
+            "/xyz/openbmc_project/object_mapper",
+            "/xyz/openbmc_project/software",
+            "/xyz/openbmc_project/state",
+            "/xyz/openbmc_project/time",
+            "/xyz/openbmc_project/user"
+         ],
+         "message": "200 OK",
+         "status": "ok"
+         }
+
+- Performing the same query with `/list` will list the child objects *recursively*.
+
+         $ curl -k https://${bmc}/xyz/openbmc_project/network/list
+         {
+         "data":[
+            "/xyz/openbmc_project/network/config",
+            "/xyz/openbmc_project/network/config/dhcp",
+            "/xyz/openbmc_project/network/eth0",
+            "/xyz/openbmc_project/network/eth0/ipv4",
+            "/xyz/openbmc_project/network/eth0/ipv4/7d3d3b69",
+            "/xyz/openbmc_project/network/eth0/ipv4/abcbdc51",
+            "/xyz/openbmc_project/network/eth0/ipv6",
+            "/xyz/openbmc_project/network/eth0/ipv6/c67fafda",
+            "/xyz/openbmc_project/network/eth1",
+            "/xyz/openbmc_project/network/eth1/ipv4",
+            "/xyz/openbmc_project/network/eth1/ipv4/7aaae888",
+            "/xyz/openbmc_project/network/eth1/ipv4/92df930b",
+            "/xyz/openbmc_project/network/eth1/ipv6",
+            "/xyz/openbmc_project/network/eth1/ipv6/b0530ca9",
+            "/xyz/openbmc_project/network/host0",
+            "/xyz/openbmc_project/network/host0/intf",
+            "/xyz/openbmc_project/network/host0/intf/addr",
+            "/xyz/openbmc_project/network/sit0",
+            "/xyz/openbmc_project/network/snmp",
+            "/xyz/openbmc_project/network/snmp/manager"
+         ],
+         "message": "200 OK",
+         "status": "ok"
+         }
+
+- Adding `/enumerate` instead of `/list` will also include the attributes of the listed objects.
+
+         $ curl -k https://${bmc}/xyz/openbmc_project/time/enumerate
+         {
+         "data": {
+            "/xyz/openbmc_project/time/bmc": {
+               "Elapsed": 1570524502358947
+            },
+            "/xyz/openbmc_project/time/host": {
+               "Elapsed": 1570524502361375
+            },
+            "/xyz/openbmc_project/time/owner": {
+               "TimeOwner": "xyz.openbmc_project.Time.Owner.Owners.BMC"
+            },
+            "/xyz/openbmc_project/time/sync_method": {
+               "TimeSyncMethod": "xyz.openbmc_project.Time.Synchronization.Method.NTP"
+            }
+         },
+         "message": "200 OK",
+         "status": "ok"
+         }
+
+### HTTP PUT operations
+PUT operations are for updating an existing resource (an object or property), or for creating a new resource when the client already knows where to put it. These require a json formatted payload.
+To make curl use the correct content type header use the -d option to specify that we're sending JSON data:
+
+      curl -k -X PUT -d <json> <url>
+For example, to power on host by doing a PUT:
+
+      curl -k -X PUT \
+            -d '{"data": "xyz.openbmc_project.State.Host.Transition.On"}' \
+            https://${bmc}/xyz/openbmc_project/state/host0/attr/RequestedHostTransition
+
+### HTTP POST operations
+POST operations are for calling methods.
+To invoke a method with parameters, for example, Downloading a Tar image via TFTP:
+
+         curl -k -X POST -d '{"data": ["<Image Tarball>", "<TFTP Server>"]}' \
+         https://${bmc}/xyz/openbmc_project/software/action/DownloadViaTFTP
+
+To invoke a method without parameters, for example, Factory Reset of BMC and Host:
+
+         curl -k -X POST -d '{"data":[]}' \
+         https://${bmc}/xyz/openbmc_project/software/action/Reset
+
+### HTTP DELETE operations
+DELETE operations are for removing instances. Only D-Bus objects (instances) can be removed.
+For example, to delete the event record with ID 1:
+
+         curl -k -X DELETE https://${bmc}/xyz/openbmc_project/logging/entry/1
+
+### Uploading images
+It is possible to upload software upgrade images (for example to upgrade the BMC or host software) via REST. The content-type should be set to "application/octet-stream".
+For example, to upload an image:
+
+         curl -k -H "Content-Type: application/octet-stream" \
+         -X POST -T test https://${bmc}/upload/image
+
+The operation will either return the version id (hash) of the uploaded file on success:
+
+         {
+           "data": "d2302e3c",
+           "message": "200 OK",
+           "status": "ok"
+         }
+
+or an error message:
+
+         {
+             "data": {
+                 "description": "Version already exists or failed to be extracted"
+             },
+             "message": "400 Bad Request",
+             "status": "error"
+         }
