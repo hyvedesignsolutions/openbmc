@@ -87,9 +87,9 @@ You can copy BMC firmware by scp command from your host.
 The file name must be called ***image-bmc***
 
 ```
-export server=10.19.84.81
+export server=192.168.1.2
 cd /run/initramfs/
-scp user@{server}:image-bmc ./
+scp user@$server:image-bmc ./
 reboot
 ```
 During the BMC reboot process, the firmware will be updated.
