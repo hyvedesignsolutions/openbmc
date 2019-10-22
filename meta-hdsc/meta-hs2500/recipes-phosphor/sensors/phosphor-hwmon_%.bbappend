@@ -1,6 +1,6 @@
-FILESEXTRAPATHS_prepend_romulus := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS_prepend_hs2500 := "${THISDIR}/${PN}:"
 
-EXTRA_OECONF_append_romulus = " --enable-negative-errno-on-fail"
+EXTRA_OECONF_append_hs2500 = " --enable-negative-errno-on-fail"
 
 CHIPS = " \
         bus@1e78a000/i2c-bus@440/w83773g@4c \
@@ -8,18 +8,17 @@ CHIPS = " \
         "
 ITEMSFMT = "ahb/apb/{0}.conf"
 
-ITEMS = "${@compose_list(d, 'ITEMSFMT', 'CHIPS')}"
+# ITEMS = "${@compose_list(d, 'ITEMSFMT', 'CHIPS')}"
 
-ITEMS += "iio-hwmon-battery.conf"
-
-OCCS = " \
-       00--00--00--06/sbefifo1-dev0/occ-hwmon.1 \
-       00--00--00--0a/fsi1/slave@01--00/01--01--00--06/sbefifo2-dev0/occ-hwmon.2 \
-       "
-
-OCCSFMT = "devices/platform/gpio-fsi/fsi0/slave@00--00/{0}.conf"
-OCCITEMS = "${@compose_list(d, 'OCCSFMT', 'OCCS')}"
+ITEMS += "iio-hwmon-1_8v.conf \
+         iio-hwmon-1_7v.conf \
+         iio-hwmon-1_1v.conf \
+         iio-hwmon-0_825v.conf \
+         iio-hwmon-adc4.conf \
+         iio-hwmon-adc5.conf \
+         iio-hwmon-adc6.conf \
+         iio-hwmon-adc7.conf \
+         "
 
 ENVS = "obmc/hwmon/{0}"
-SYSTEMD_ENVIRONMENT_FILE_${PN}_append_romulus = " ${@compose_list(d, 'ENVS', 'ITEMS')}"
-SYSTEMD_ENVIRONMENT_FILE_${PN}_append_romulus = " ${@compose_list(d, 'ENVS', 'OCCITEMS')}"
+SYSTEMD_ENVIRONMENT_FILE_${PN}_append_hs2500 = " ${@compose_list(d, 'ENVS', 'ITEMS')}"

@@ -133,10 +133,44 @@
 		};
 	};
 
-	iio-hwmon {
+	iio-hwmon-1_8v {
 		compatible = "iio-hwmon";
-		io-channels = <&adc 0>, <&adc 1>, <&adc 2>, <&adc 3>,
-			<&adc 4>, <&adc 5>, <&adc 6>, <&adc 7>;
+		io-channels = <&adc 0>;
+	};
+
+	iio-hwmon-1_7v {
+		compatible = "iio-hwmon";
+		io-channels = <&adc 1>;
+	};
+
+	iio-hwmon-1_1v {
+		compatible = "iio-hwmon";
+		io-channels = <&adc 2>;
+	};
+
+	iio-hwmon-0_825v {
+		compatible = "iio-hwmon";
+		io-channels = <&adc 3>;
+	};
+
+	iio-hwmon-adc4 {
+		compatible = "iio-hwmon";
+		io-channels = <&adc 4>;
+	};
+
+	iio-hwmon-adc5 {
+		compatible = "iio-hwmon";
+		io-channels = <&adc 5>;
+	};
+
+	iio-hwmon-adc6 {
+		compatible = "iio-hwmon";
+		io-channels = <&adc 6>;
+	};
+
+	iio-hwmon-adc7 {
+		compatible = "iio-hwmon";
+		io-channels = <&adc 7>;
 	};
 };
 
