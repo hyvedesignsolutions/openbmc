@@ -1,0 +1,13 @@
+diff --git a/include/sel_logger.hpp b/include/sel_logger.hpp
+index bd40dff..55368cc 100644
+--- a/include/sel_logger.hpp
++++ b/include/sel_logger.hpp
+@@ -33,7 +33,7 @@ static constexpr uint16_t selInvalidRecID =
+ static constexpr size_t selEvtDataMaxSize = 3;
+ static constexpr size_t selOemDataMaxSize = 13;
+
+-static const std::filesystem::path selLogDir = "/var/log";
++static const std::filesystem::path selLogDir = "/var";
+ static const std::string selLogFilename = "ipmi_sel";
+
+ template <typename... T>

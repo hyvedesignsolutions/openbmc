@@ -1,7 +1,7 @@
 # /etc/logrotate.d/rsyslog - Ported from Debian
 
 # Keep up to four 64k files for ipmi_sel (256k total)
-/var/log/ipmi_sel
+/var/ipmi_sel
 {
     rotate 3
     size 64k
@@ -11,7 +11,7 @@
     endscript
 }
 # Keep up to four 64k files for redfish (256k total)
-/var/log/redfish
+/var/redfish
 {
     rotate 3
     size 64k

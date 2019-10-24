@@ -9,6 +9,7 @@ SRC_URI = "git://github.com/openbmc/intel-ipmi-oem \
            file://0002-hs9216-force-scanned-fru-from-ID1.patch \
            file://0003-Add-SDR-type-3-support.patch \
            file://0004-add-ipmi-acpi-support.patch \
+           file://0005-change-sel-to-non-volatile.patch \
            "
 SRCREV = "147daec5fcfcdacd8813eab6a7735d0f1b615c8a"
 
