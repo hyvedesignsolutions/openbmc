@@ -1,0 +1,13 @@
+[Unit]
+Description=Update ACBoot status
+After=xyz.openbmc_project.EntityManager.service
+[Service]
+RemainAfterExit=yes
+Type=simple
+Restart=always
+ExecStart=/usr/sbin/acboot_update.sh
+SyslogIdentifier=acboot_update
+
+[Install]
+WantedBy={SYSTEMD_DEFAULT_TARGET}
+
