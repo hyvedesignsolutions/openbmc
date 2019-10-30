@@ -293,6 +293,11 @@
 
 &i2c12 {
 	status = "okay";
+
+        tmp75@4a {
+                 compatible = "st,stlm75";
+                 reg = <0x4a>;
+        };
 };
 
 &gpio {

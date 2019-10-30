@@ -4,6 +4,7 @@ EXTRA_OECONF_append_hs2500 = " --enable-negative-errno-on-fail"
 
 CHIPS = " \
         bus@1e78a000/i2c-bus@400/tmp75@48 \
+        bus@1e78a000/i2c-bus@440/tmp75@4a \
         pwm-tacho-controller@1e786000 \
         "
 ITEMSFMT = "ahb/apb/{0}.conf"
