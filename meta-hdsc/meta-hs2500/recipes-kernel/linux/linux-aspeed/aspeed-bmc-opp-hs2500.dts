@@ -284,6 +284,11 @@
 
 &i2c11 {
 	status = "okay";
+
+        tmp75@48 {
+                 compatible = "st,stlm75";
+                 reg = <0x48>;
+        };
 };
 
 &i2c12 {

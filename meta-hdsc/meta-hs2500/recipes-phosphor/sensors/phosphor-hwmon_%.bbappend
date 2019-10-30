@@ -3,12 +3,12 @@ FILESEXTRAPATHS_prepend_hs2500 := "${THISDIR}/${PN}:"
 EXTRA_OECONF_append_hs2500 = " --enable-negative-errno-on-fail"
 
 CHIPS = " \
-        bus@1e78a000/i2c-bus@440/w83773g@4c \
+        bus@1e78a000/i2c-bus@400/tmp75@48 \
         pwm-tacho-controller@1e786000 \
         "
 ITEMSFMT = "ahb/apb/{0}.conf"
 
-# ITEMS = "${@compose_list(d, 'ITEMSFMT', 'CHIPS')}"
+ITEMS = "${@compose_list(d, 'ITEMSFMT', 'CHIPS')}"
 
 ITEMS += "iio-hwmon-1_8v.conf \
          iio-hwmon-1_7v.conf \
