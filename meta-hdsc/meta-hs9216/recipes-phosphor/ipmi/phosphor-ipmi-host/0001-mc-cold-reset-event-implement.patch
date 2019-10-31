@@ -1,0 +1,35 @@
+diff --git a/globalhandler.cpp b/globalhandler.cpp
+index c192cbb..b28dd9d 100644
+--- a/globalhandler.cpp
++++ b/globalhandler.cpp
+@@ -38,6 +38,30 @@ void resetBMC()
+  */
+ ipmi::RspType<> ipmiGlobalReset()
+ {
++// Hyve++ add event before bmc reset
++   uint16_t genid = 0x20;
++   bool assert=1;
++   std::vector<uint8_t> eventData(3, 0xFF);
++   eventData[0]=1;  //hard reset
++   static constexpr char const* ipmiSELService =    "xyz.openbmc_project.Logging.IPMI";
++   static constexpr char const* ipmiSELPath = "/xyz/openbmc_project/Logging/IPMI";
++   static constexpr char const* ipmiSELAddInterface = "xyz.openbmc_project.Logging.IPMI";
++   static const std::string ipmiSELAddMessage = "SEL Entry";
++   boost::asio::io_service io;
++   auto systemBus = std::make_shared<sdbusplus::asio::connection>(io);
++   sdbusplus::message::message writeSEL = systemBus->new_method_call(
++                            ipmiSELService, ipmiSELPath, ipmiSELAddInterface, "IpmiSelAdd");
++   writeSEL.append(ipmiSELAddMessage,  std::string("/xyz/openbmc_project/sensors/systemboot/MCReset"), eventData, assert, genid);
++   try
++   {
++       systemBus->call(writeSEL);
++   }
++   catch (sdbusplus::exception_t& e)
++   {
++       std::cerr << "call IpmiSelAdd failed\n";
++   }
++// ++ Hyve
++
+     try
+     {
+         resetBMC();

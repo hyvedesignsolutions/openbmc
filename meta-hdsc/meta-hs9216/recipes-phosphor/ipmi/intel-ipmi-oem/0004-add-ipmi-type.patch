@@ -1,31 +1,36 @@
-From 68af15ce6b0a9de2b70d0a616c9d3ba23991a10b Mon Sep 17 00:00:00 2001
+From 7956d97dc79daa52381835642472f1ac5d0b5d54 Mon Sep 17 00:00:00 2001
 From: Jeannie Wu <jeanniew@hyvedesignsolutions.com>
 Date: Fri, 4 Oct 2019 16:14:03 +0800
-Subject: [PATCH] add ipmi acpi support
+Subject: [PATCH] add ipmi type support
 
 ---
- include/sdrutils.hpp | 4 ++++
- 1 file changed, 4 insertions(+)
+ include/sdrutils.hpp | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/include/sdrutils.hpp b/include/sdrutils.hpp
-index 87e1b10..628f3ec 100755
+index 87e1b10..2fd04c7 100755
 --- a/include/sdrutils.hpp
 +++ b/include/sdrutils.hpp
-@@ -162,6 +162,8 @@ enum class SensorTypeCodes : uint8_t
+@@ -162,9 +162,11 @@ enum class SensorTypeCodes : uint8_t
      current = 0x3,
      fan = 0x4,
      processor = 0x07,
 +    powersupply = 0x09,
 +    acpi = 0x22,
++    systemboot = 0x1d,
      other = 0xB,
  };
- 
-@@ -172,6 +174,8 @@ const static boost::container::flat_map<const char*, SensorTypeCodes, CmpStr>
+-
+ const static boost::container::flat_map<const char*, SensorTypeCodes, CmpStr>
+     sensorTypes{{{"temperature", SensorTypeCodes::temperature},
+                  {"voltage", SensorTypeCodes::voltage},
+@@ -172,6 +174,9 @@ const static boost::container::flat_map<const char*, SensorTypeCodes, CmpStr>
                   {"fan_tach", SensorTypeCodes::fan},
                   {"fan_pwm", SensorTypeCodes::fan},
                   {"processor", SensorTypeCodes::processor},   
 +                 {"powersupply", SensorTypeCodes::powersupply},
 +                 {"acpi", SensorTypeCodes::acpi},
++                 {"systemboot", SensorTypeCodes::systemboot},
                   {"power", SensorTypeCodes::other}}};
  
  inline static std::string getSensorTypeStringFromPath(const std::string& path)
