@@ -166,3 +166,45 @@
     sensorType: 2
     serviceInterface: org.freedesktop.DBus.Properties
     unit: xyz.openbmc_project.Sensor.Value.Unit.Volts
+9:
+    bExp: 0
+    entityID: 64
+    entityInstance: 1
+    interfaces:
+        xyz.openbmc_project.Sensor.Value:
+            Value:
+                Offsets:
+                    255:
+                        type: int64_t
+    multiplierM: 314
+    offsetB: 0
+    path: /xyz/openbmc_project/sensors/temperature/ambient_hs2500
+    rExp: -3
+    readingType: readingData
+    scale: -3
+    sensorNamePattern: nameLeaf
+    sensorReadingType: 1
+    sensorType: 1
+    serviceInterface: org.freedesktop.DBus.Properties
+    unit: xyz.openbmc_project.Sensor.Value.Unit.DegreesC
+10:
+    bExp: 0
+    entityID: 64
+    entityInstance: 2
+    interfaces:
+        xyz.openbmc_project.Sensor.Value:
+            Value:
+                Offsets:
+                    255:
+                        type: int64_t
+    multiplierM: 314
+    offsetB: 0
+    path: /xyz/openbmc_project/sensors/temperature/ambient_hsbuv
+    rExp: -3
+    readingType: readingData
+    scale: -3
+    sensorNamePattern: nameLeaf
+    sensorReadingType: 1
+    sensorType: 1
+    serviceInterface: org.freedesktop.DBus.Properties
+    unit: xyz.openbmc_project.Sensor.Value.Unit.DegreesC
