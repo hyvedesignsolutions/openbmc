@@ -10,6 +10,7 @@ SRC_URI = "git://github.com/openbmc/intel-ipmi-oem \
            file://0003-Add-SDR-type-3-support.patch \
            file://0004-add-ipmi-type.patch \
            file://0005-change-sel-to-non-volatile.patch \
+           file://0006-add-sel-clear-event.patch \
            "
 SRCREV = "147daec5fcfcdacd8813eab6a7735d0f1b615c8a"
 

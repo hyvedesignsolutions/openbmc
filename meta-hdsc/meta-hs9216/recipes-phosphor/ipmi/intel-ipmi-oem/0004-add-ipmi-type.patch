@@ -1,21 +1,22 @@
-From 7956d97dc79daa52381835642472f1ac5d0b5d54 Mon Sep 17 00:00:00 2001
+From f14f1796f2967b6fb25dcf33e59cdff634fa05a0 Mon Sep 17 00:00:00 2001
 From: Jeannie Wu <jeanniew@hyvedesignsolutions.com>
 Date: Fri, 4 Oct 2019 16:14:03 +0800
 Subject: [PATCH] add ipmi type support
 
 ---
- include/sdrutils.hpp | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ include/sdrutils.hpp | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/include/sdrutils.hpp b/include/sdrutils.hpp
-index 87e1b10..2fd04c7 100755
+index 87e1b10..b98cc88 100755
 --- a/include/sdrutils.hpp
 +++ b/include/sdrutils.hpp
-@@ -162,9 +162,11 @@ enum class SensorTypeCodes : uint8_t
+@@ -162,9 +162,12 @@ enum class SensorTypeCodes : uint8_t
      current = 0x3,
      fan = 0x4,
      processor = 0x07,
 +    powersupply = 0x09,
++    logevent = 0x10,
 +    acpi = 0x22,
 +    systemboot = 0x1d,
      other = 0xB,
@@ -24,11 +25,12 @@ index 87e1b10..2fd04c7 100755
  const static boost::container::flat_map<const char*, SensorTypeCodes, CmpStr>
      sensorTypes{{{"temperature", SensorTypeCodes::temperature},
                   {"voltage", SensorTypeCodes::voltage},
-@@ -172,6 +174,9 @@ const static boost::container::flat_map<const char*, SensorTypeCodes, CmpStr>
+@@ -172,6 +175,10 @@ const static boost::container::flat_map<const char*, SensorTypeCodes, CmpStr>
                   {"fan_tach", SensorTypeCodes::fan},
                   {"fan_pwm", SensorTypeCodes::fan},
                   {"processor", SensorTypeCodes::processor},   
 +                 {"powersupply", SensorTypeCodes::powersupply},
++                 {"logevent", SensorTypeCodes::logevent},
 +                 {"acpi", SensorTypeCodes::acpi},
 +                 {"systemboot", SensorTypeCodes::systemboot},
                   {"power", SensorTypeCodes::other}}};

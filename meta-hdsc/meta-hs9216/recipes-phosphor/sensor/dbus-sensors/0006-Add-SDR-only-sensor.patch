@@ -124,9 +124,9 @@ index 0000000..0880dbe
 +/* Api format : /xyz/openbmc_project/sensors/{sensorType}/{sensorName}   
 + * need to change array size if add element
 + */
-+static constexpr std::array<const char*, 1> sensorTypes = {
-+  "/xyz/openbmc_project/sensors/systemboot/MCReset"
-+ 
++static constexpr std::array<const char*, 2> sensorTypes = {
++  "/xyz/openbmc_project/sensors/systemboot/MCReset",
++  "/xyz/openbmc_project/sensors/logevent/SYSTEM_EVENT_LOG"
 +};
 +
 +int main()
