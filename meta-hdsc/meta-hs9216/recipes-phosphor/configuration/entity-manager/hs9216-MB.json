@@ -72,7 +72,7 @@
             "Index": 3,
             "Name": "VOL_PCH_1_05V",
             "ScaleFactor": 1,
-            "MaxValue": 2,
+            "MaxValue": 1.2,
             "MinValue": 0,
             "Thresholds": [
                 {
@@ -116,7 +116,7 @@
             "Index": 5,
             "Name": "VOL_5V_AUX",
             "ScaleFactor": 0.272291,
-            "MaxValue": 7,
+            "MaxValue": 5.5,
             "MinValue": 0,
             "Thresholds": [
                 {
@@ -137,7 +137,7 @@
         {
             "Index": 6,
             "Name": "VOL_PCH_1_8V",
-            "ScaleFactor": 1,
+            "ScaleFactor": 0.7516,
             "MaxValue": 7,
             "MinValue": 0,
             "Thresholds": [
@@ -157,6 +157,12 @@
             "Type": "ADC"
         },
         {
+            "BridgeGpio": [
+                {
+                    "Name": "FM_BAT_MON",
+                    "Polarity": "High"
+                }
+            ],
             "Index": 7,
             "Name": "VOL_BATTERY",
             "ScaleFactor": 0.3333,
@@ -167,13 +173,13 @@
                     "Direction": "greater than",
                     "Name": "upper critical",
                     "Severity": 1,
-                    "Value": 3.15
+                    "Value": 3.74
                 },
                 {
                     "Direction": "less than",
                     "Name": "lower critical",
                     "Severity": 1,
-                    "Value": 2.85
+                    "Value": 2.73
                 }
             ],
             "Type": "ADC"
@@ -183,20 +189,20 @@
             "Name": "VOL_CPU0_VCORE",
             "PowerState": "On",
             "ScaleFactor": 0.741602,
-            "MaxValue": 18,
+            "MaxValue": 2,
             "MinValue": 0,
             "Thresholds": [
                 {
                     "Direction": "greater than",
                     "Name": "upper critical",
                     "Severity": 1,
-                    "Value": 1.96
+                    "Value": 1.8
                 },
                 {
                     "Direction": "less than",
                     "Name": "lower critical",
                     "Severity": 1,
-                    "Value": 1.78
+                    "Value": 1.6
                 }
             ],
             "Type": "ADC"
@@ -206,20 +212,20 @@
             "Name": "VOL_CPU1_VCORE",
             "PowerState": "On",
             "ScaleFactor": 0.741602,
-            "MaxValue": 18,
+            "MaxValue": 2,
             "MinValue": 0,
             "Thresholds": [
                 {
                     "Direction": "greater than",
                     "Name": "upper critical",
                     "Severity": 1,
-                    "Value": 1.96
+                    "Value": 1.8
                 },
                 {
                     "Direction": "less than",
                     "Name": "lower critical",
                     "Severity": 1,
-                    "Value": 1.78
+                    "Value": 1.6
                 }
             ],
             "Type": "ADC"
@@ -320,21 +326,21 @@
             "Index": 14,
             "Name": "VOL_SYS0_VCCIO",
             "PowerState": "On",
-            "ScaleFactor": 0.741602,
-            "MaxValue": 18,
+            "ScaleFactor": 1,
+            "MaxValue": 1.2,
             "MinValue": 0,
             "Thresholds": [
                 {
                     "Direction": "greater than",
                     "Name": "upper critical",
                     "Severity": 1,
-                    "Value": 1.96
+                    "Value": 1.04
                 },
                 {
                     "Direction": "less than",
                     "Name": "lower critical",
                     "Severity": 1,
-                    "Value": 1.78
+                    "Value": 0.96
                 }
             ],
             "Type": "ADC"
@@ -343,21 +349,21 @@
             "Index": 15,
             "Name": "VOL_SYS1_VCCIO",
             "PowerState": "On",
-            "ScaleFactor": 0.741602,
-            "MaxValue": 18,
+            "ScaleFactor": 1,
+            "MaxValue": 1.2,
             "MinValue": 0,
             "Thresholds": [
                 {
                     "Direction": "greater than",
                     "Name": "upper critical",
                     "Severity": 1,
-                    "Value": 1.96
+                    "Value": 1.04
                 },
                 {
                     "Direction": "less than",
                     "Name": "lower critical",
                     "Severity": 1,
-                    "Value": 1.78
+                    "Value": 0.96
                 }
             ],
             "Type": "ADC"

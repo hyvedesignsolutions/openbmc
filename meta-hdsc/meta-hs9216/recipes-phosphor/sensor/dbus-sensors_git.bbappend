@@ -7,6 +7,7 @@ SRC_URI += "file://0001-modfiied-fan-MaxReading.patch \
             file://0004-add-ipmi-ACPI-sensor.patch \
             file://0005-Add-aclost-detect-sensor.patch \
             file://0006-Add-SDR-only-sensor.patch \
+            file://0007-Add-battery-monitor-intervel.patch \
             "
 
 SYSTEMD_SERVICE_${PN} += " xyz.openbmc_project.processorsensor.service"
