@@ -280,6 +280,18 @@
 
 &i2c10 {
 	status = "okay";
+
+        ina219@40 {
+                  compatible = "ti,ina219";
+                  reg = <0x40>;
+                  shunt-resistor = <2000>;
+        };
+
+        ina219@41 {
+                  compatible = "ti,ina219";
+                  reg = <0x41>;
+                  shunt-resistor = <2000>;
+        };
 };
 
 &i2c11 {
