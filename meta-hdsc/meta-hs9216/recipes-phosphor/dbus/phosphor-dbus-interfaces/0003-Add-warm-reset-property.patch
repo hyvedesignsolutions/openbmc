@@ -1,0 +1,15 @@
+diff --git a/xyz/openbmc_project/State/Host.interface.yaml b/xyz/openbmc_project/State/Host.interface.yaml
+index 8f481b8..0127dc0 100644
+--- a/xyz/openbmc_project/State/Host.interface.yaml
++++ b/xyz/openbmc_project/State/Host.interface.yaml
+@@ -31,6 +31,10 @@ enumerations:
+         - name: 'Reboot'
+           description: >
+             Host firmware should be rebooted
++        - name: 'Reset'
++          description: >
++            Host firmware should be warm reset
++
+ 
+     - name: HostState
+       description: >

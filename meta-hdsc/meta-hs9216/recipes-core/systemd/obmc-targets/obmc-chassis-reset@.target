@@ -1,0 +1,6 @@
+[Unit]
+Description=HS9216 Chassis%i Warm Reset
+Wants=obmc-standby.target
+After=obmc-standby.target
+Conflicts=obmc-chassis-poweroff@%i.target
+RefuseManualStop=no

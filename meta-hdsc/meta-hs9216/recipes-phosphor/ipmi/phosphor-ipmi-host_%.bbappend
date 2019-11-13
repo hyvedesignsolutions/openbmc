@@ -1,6 +1,7 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
 SRC_URI += "file://0001-mc-cold-reset-event-implement.patch \
+            file://0002-Fix-ipmi-chassis-reset-command.patch \
           "
 do_install_append(){
   install -d ${D}${includedir}/phosphor-ipmi-host
