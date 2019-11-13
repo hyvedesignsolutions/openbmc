@@ -2,7 +2,6 @@
 /dts-v1/;
 #include "aspeed-g5.dtsi"
 #include <dt-bindings/gpio/aspeed-gpio.h>
-#include <dt-bindings/leds/leds-pca955x.h>
 
 / {
 	model = "HS2500 BMC";
@@ -297,6 +296,14 @@
         pca9555@21 {
 		compatible = "nxp,pca9555";
 		reg = <0x21>;
+
+		gpio-controller;
+		#gpio-cells = <2>;
+	};
+
+        pca9554@38 {
+		compatible = "nxp,pca9554";
+		reg = <0x38>;
 
 		gpio-controller;
 		#gpio-cells = <2>;
