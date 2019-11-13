@@ -1,0 +1,57 @@
+diff --git a/gpio-util/meson.build b/gpio-util/meson.build
+index d14cbc3..09c6284 100644
+--- a/gpio-util/meson.build
++++ b/gpio-util/meson.build
+@@ -1,3 +1,4 @@
++incdir = include_directories('..')
+ executable(
+     'phosphor-gpio-util',
+     'argument.cpp',
+@@ -6,7 +7,7 @@ executable(
+     dependencies: [
+         phosphor_logging,
+     ],
+-    include_directories: '..',
++    include_directories: incdir,
+     implicit_include_directories: false,
+     install: true,
+ )
+diff --git a/presence/meson.build b/presence/meson.build
+index 1476e24..7e285ca 100644
+--- a/presence/meson.build
++++ b/presence/meson.build
+@@ -1,3 +1,4 @@
++incdir = include_directories('..')
+ executable(
+     'phosphor-gpio-presence',
+     'argument.cpp',
+@@ -8,7 +9,7 @@ executable(
+         libevdev,
+         phosphor_logging,
+     ],
+-    include_directories: '..',
++    include_directories: incdir,
+     implicit_include_directories: false,
+     install: true,
+     link_with: [
+diff --git a/test/meson.build b/test/meson.build
+index c71f83a..9f3b9e4 100644
+--- a/test/meson.build
++++ b/test/meson.build
+@@ -1,6 +1,6 @@
+ gmock = dependency('gmock', disabler: true, required: build_tests)
+ gtest = dependency('gtest', main: true, disabler: true, required: build_tests)
+-
++incdir = include_directories('..')
+ test(
+     'utest',
+     executable(
+@@ -11,7 +11,7 @@ test(
+             libevdev,
+         ],
+         implicit_include_directories: false,
+-        include_directories: '..',
++        include_directories: incdir,
+         link_with: [
+             libevdev_o,
+             libmonitor_o,

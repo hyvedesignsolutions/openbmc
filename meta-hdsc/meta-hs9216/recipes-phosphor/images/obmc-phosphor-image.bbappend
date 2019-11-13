@@ -7,6 +7,7 @@ OBMC_IMAGE_EXTRA_INSTALL_append_hs9216 = " ipmitool \
                                            phosphor-sel-logger \
                                            caterr-update \
                                            acboot-update \
+                                           gpio-event \
                                          "
 
 FLASH_RWFS_OFFSET = "30720"

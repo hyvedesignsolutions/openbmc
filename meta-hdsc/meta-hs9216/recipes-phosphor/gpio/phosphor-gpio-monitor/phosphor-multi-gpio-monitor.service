@@ -1,0 +1,9 @@
+[Unit]
+Description=Phosphor Multi GPIO monitor
+
+[Service]
+Restart=yes
+ExecStart=/usr/bin/phosphor-multi-gpio-monitor --config /usr/share/phosphor-gpio-monitor/phosphor-multi-gpio-monitor.json
+
+[Install]
+WantedBy={SYSTEMD_DEFAULT_TARGET}
