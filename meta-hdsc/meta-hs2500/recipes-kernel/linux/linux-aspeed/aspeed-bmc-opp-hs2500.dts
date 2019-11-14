@@ -115,6 +115,38 @@
 		F2 {
 			gpios = <&gpio ASPEED_GPIO(D, 5) GPIO_ACTIVE_HIGH>;
 		};
+
+                D1601 {
+                       gpios = <&pca9554 0 GPIO_ACTIVE_LOW>;
+                };
+
+                D1602 {
+                       gpios = <&pca9554 1 GPIO_ACTIVE_LOW>;
+                };
+
+                D1603 {
+                       gpios = <&pca9554 2 GPIO_ACTIVE_LOW>;
+                };
+
+                D1604 {
+                       gpios = <&pca9554 3 GPIO_ACTIVE_LOW>;
+                };
+
+                D1605 {
+                       gpios = <&pca9554 4 GPIO_ACTIVE_LOW>;
+                };
+
+                D1606 {
+                       gpios = <&pca9554 5 GPIO_ACTIVE_LOW>;
+                };
+
+                D1607 {
+                       gpios = <&pca9554 6 GPIO_ACTIVE_LOW>;
+                };
+
+                D1608 {
+                       gpios = <&pca9554 7 GPIO_ACTIVE_LOW>;
+                };
 	};
 
 	gpio-keys {
@@ -301,7 +333,7 @@
 		#gpio-cells = <2>;
 	};
 
-        pca9554@38 {
+        pca9554: pca9554@38 {
 		compatible = "nxp,pca9554";
 		reg = <0x38>;
 
