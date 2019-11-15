@@ -349,6 +349,14 @@
                  compatible = "st,stlm75";
                  reg = <0x48>;
         };
+
+        i2c-switch@70 {
+		compatible = "nxp,pca9548";
+		#address-cells = <1>;
+		#size-cells = <0>;
+		reg = <0x70>;
+                reset-gpios = <&gpio ASPEED_GPIO(D, 1) GPIO_ACTIVE_LOW>;
+        };
 };
 
 &i2c12 {
