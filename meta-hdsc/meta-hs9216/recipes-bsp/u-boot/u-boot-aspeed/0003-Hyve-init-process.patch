@@ -222,9 +222,9 @@ index 0000000..dac0c22
 +	reg32 = reg32 | (1<<18);   /* Enable I2C5 function pins             */                               \
 +	reg32 = reg32 | (1<<17);   /* Enable I2C4 function pins             */                               \
 +	reg32 = reg32 | (1<<16);   /* Enable I2C3 function pins             */                               \
-+	reg32 = reg32 |  (1<<15);  /* RGMII2/RMII2 RX pins internal pull down */                             \
++	reg32 = reg32 &  (1<<15);  /* RGMII2/RMII2 RX pins internal pull down */                             \
 +	reg32 = reg32 & ~(1<<14);  /* RGMII2/RMII2 TX pins internal pull down */                             \
-+	reg32 = reg32 |  (1<<13);  /* RGMII1/RMII1 RX pins internal pull down */                             \
++	reg32 = reg32 &  (1<<13);  /* RGMII1/RMII1 RX pins internal pull down */                             \
 +	reg32 = reg32 & ~(1<<12);  /* RGMII1/RMII1 TX pins internal pull down */                             \
 +                                                                                                         \
 +	/*                                                                                                   \
@@ -278,7 +278,7 @@ index 0000000..dac0c22
 +	*((volatile u_long *) (SCU_REG_BASE + 0x94)) = reg32;                                                \
 +																										 \
 +	/* SCUA0 Multi-function Pin Control #7  */                                 							 \
-+	*((volatile u_long *) (SCU_REG_BASE + 0xa0)) = 0x00000000;                                           \
++	*((volatile u_long *) (SCU_REG_BASE + 0xa0)) = 0x00000030;                                           \
 +																										 \
 +	/* SCUA4 Multi-function Pin Control #8  */                                 							 \
 +    reg32 = *((volatile u_long *) (SCU_REG_BASE + 0xa4));                                                \
