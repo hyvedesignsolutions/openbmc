@@ -127,20 +127,24 @@
 	status = "okay";
 };
 
-&mac1 {
-
-
+/* NCSI port */
+ 
+&mac1 { 
+        status = "okay";
+        reg = <0x1e660000 0x180>;
+        interrupts = <2>;
         status = "okay";
         pinctrl-names = "default";
-        pinctrl-0 = <&pinctrl_rmii1_default>;
+        pinctrl-0 = <&pinctrl_rmii1_default &pinctrl_mdio1_default>;
         use-ncsi;
 };
 
+/* Dedicated port */
 &mac0 {
-
-
 	status = "okay";
-
+        reg = <0x1e680000 0x180>;
+        interrupts = <3>;
+        status = "okay";
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_rgmii2_default &pinctrl_mdio2_default>;
 };

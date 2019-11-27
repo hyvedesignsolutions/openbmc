@@ -1,0 +1,53 @@
+From d999c1c42836b7b0a2ccc0686f05362854292927 Mon Sep 17 00:00:00 2001
+From: Jeannie Wu <jeanniew@hyvedesignsolutions.com>
+Date: Tue, 19 Nov 2019 11:09:45 +0800
+Subject: [PATCH] setting lan led config
+
+---
+ drivers/net/phy/realtek.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+
+diff --git a/drivers/net/phy/realtek.c b/drivers/net/phy/realtek.c
+index a669945..f8653e1 100644
+--- a/drivers/net/phy/realtek.c
++++ b/drivers/net/phy/realtek.c
+@@ -43,6 +43,27 @@
+ MODULE_AUTHOR("Johnson Leung");
+ MODULE_LICENSE("GPL");
+ 
++static int phy_led_init(struct phy_device *phydev)
++{
++  const u16 LED_PAGE = 0x0d04, PHY_PAGE = 0x0;
++  const int PAGSR = 0x1f, LCR = 0x10, EEELCR = 0x11;
++  const u16 LED_MAGIC = 0x091a; // LED0-ACT, LED1-1000M, LED2-100M
++  const u16 EEE_LED_MAGIC = 0x0002; // Enable EEE LED0
++
++  // Switch to LED control page
++  phy_write(phydev, PAGSR, LED_PAGE);
++
++  // Write LED settings
++  phy_write(phydev, LCR, LED_MAGIC);
++  phy_write(phydev, EEELCR, EEE_LED_MAGIC);
++
++  // Switch back to PHY default page
++  phy_write(phydev, PAGSR, PHY_PAGE);
++  return 0;
++}
++
++
++
+ static int rtl821x_read_page(struct phy_device *phydev)
+ {
+ 	return __phy_read(phydev, RTL821x_PAGE_SELECT);
+@@ -178,6 +199,8 @@ static int rtl8211f_config_init(struct phy_device *phydev)
+ 	default: /* the rest of the modes imply leaving delay as is. */
+ 		return 0;
+ 	}
++        printk("Jeannie debug : speed= %x\n",phydev->speed);
++        phy_led_init(phydev);
+ 
+ 	return phy_modify_paged(phydev, 0xd08, 0x11, RTL8211F_TX_DELAY, val);
+ }
+-- 
+1.8.3.1
+
