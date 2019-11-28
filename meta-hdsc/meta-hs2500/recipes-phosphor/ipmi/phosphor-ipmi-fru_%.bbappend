@@ -9,7 +9,7 @@ inherit obmc-phosphor-systemd
 
 FILESEXTRAPATHS_prepend_hs2500 := "${THISDIR}/${PN}:"
 
-EEPROM_NAMES = "bmc"
+EEPROM_NAMES = "bmc motherboard"
 
 EEPROMFMT = "system/chassis/{0}"
 EEPROM_ESCAPEDFMT = "system-chassis-{0}"
