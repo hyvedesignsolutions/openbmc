@@ -574,6 +574,21 @@
                 }
             ],
             "Type": "AspeedFan"
+        },
+        {
+            "Address": "0x8",
+            "Class": "METemp",
+            "Name": "PCH Temp",
+            "PowerState": "Always",
+            "Thresholds": [
+                {
+                    "Direction": "greater than",
+                    "Name": "upper critical",
+                    "Severity": 1,
+                    "Value": 86
+                }
+            ],
+            "Type": "IpmbSensor"
         }
     ],
     "Name": "hs9216 Main Board",
