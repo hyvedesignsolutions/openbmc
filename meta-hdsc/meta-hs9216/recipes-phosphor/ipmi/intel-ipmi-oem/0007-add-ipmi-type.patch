@@ -4,35 +4,35 @@ Date: Fri, 4 Oct 2019 16:14:03 +0800
 Subject: [PATCH] add ipmi type support
 
 ---
- include/sdrutils.hpp | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ include/sdrutils.hpp | 10 ++++++++-
+ 1 file changed, 10 insertions(+)
 
 diff --git a/include/sdrutils.hpp b/include/sdrutils.hpp
-index 87e1b10..b98cc88 100755
+index a643e78..09934f7 100755
 --- a/include/sdrutils.hpp
 +++ b/include/sdrutils.hpp
-@@ -162,9 +162,12 @@ enum class SensorTypeCodes : uint8_t
+@@ -172,6 +172,11 @@ enum class SensorTypeCodes : uint8_t
+     voltage = 0x2,
      current = 0x3,
      fan = 0x4,
-     processor = 0x07,
++    processor = 0x07,
 +    powersupply = 0x09,
 +    logevent = 0x10,
 +    acpi = 0x22,
 +    systemboot = 0x1d,
      other = 0xB,
  };
--
- const static boost::container::flat_map<const char*, SensorTypeCodes, CmpStr>
-     sensorTypes{{{"temperature", SensorTypeCodes::temperature},
-                  {"voltage", SensorTypeCodes::voltage},
-@@ -172,6 +175,10 @@ const static boost::container::flat_map<const char*, SensorTypeCodes, CmpStr>
+
+@@ -181,6 +186,11 @@ const static boost::container::flat_map<const char*, SensorTypeCodes, CmpStr>
+                  {"current", SensorTypeCodes::current},
                   {"fan_tach", SensorTypeCodes::fan},
                   {"fan_pwm", SensorTypeCodes::fan},
-                  {"processor", SensorTypeCodes::processor},   
++                 {"processor", SensorTypeCodes::processor},
 +                 {"powersupply", SensorTypeCodes::powersupply},
 +                 {"logevent", SensorTypeCodes::logevent},
 +                 {"acpi", SensorTypeCodes::acpi},
 +                 {"systemboot", SensorTypeCodes::systemboot},
                   {"power", SensorTypeCodes::other}}};
- 
+
  inline static std::string getSensorTypeStringFromPath(const std::string& path)
+

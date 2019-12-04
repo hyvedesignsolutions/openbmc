@@ -1,19 +1,19 @@
-From 6a75b9e952948dad21b2c127e1cb2918c1556e0f Mon Sep 17 00:00:00 2001
+From 4f0ccbca8490b448b0589bfb385a7fd7fd35adde Mon Sep 17 00:00:00 2001
 From: Ray Lue <ray.lue@mic.com.tw>
 Date: Thu, 5 Sep 2019 13:43:13 +0800
 Subject: [PATCH] add SDR type 3 support
 
 ---
- include/sdrutils.hpp   | 18 ++++++++-
- src/sensorcommands.cpp | 88 ++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 104 insertions(+), 2 deletions(-)
+ include/sdrutils.hpp   | 15 +++++++--
+ src/sensorcommands.cpp | 88 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 101 insertions(+), 2 deletions(-)
  mode change 100644 => 100755 include/sdrutils.hpp
  mode change 100644 => 100755 src/sensorcommands.cpp
 
 diff --git a/include/sdrutils.hpp b/include/sdrutils.hpp
 old mode 100644
 new mode 100755
-index 8969bd6..87e1b10
+index 8969bd6..16c50ee
 --- a/include/sdrutils.hpp
 +++ b/include/sdrutils.hpp
 @@ -112,7 +112,7 @@ inline static bool getSensorNumMap(std::shared_ptr<SensorNumMap>& sensorNumMap)
@@ -25,23 +25,7 @@ index 8969bd6..87e1b10
      if (!sensorTreeUpdated && sensorNumMapPtr)
      {
          sensorNumMap = sensorNumMapPtr;
-@@ -161,6 +161,7 @@ enum class SensorTypeCodes : uint8_t
-     voltage = 0x2,
-     current = 0x3,
-     fan = 0x4,
-+    processor = 0x07,
-     other = 0xB,
- };
- 
-@@ -170,6 +171,7 @@ const static boost::container::flat_map<const char*, SensorTypeCodes, CmpStr>
-                  {"current", SensorTypeCodes::current},
-                  {"fan_tach", SensorTypeCodes::fan},
-                  {"fan_pwm", SensorTypeCodes::fan},
-+                 {"processor", SensorTypeCodes::processor},   
-                  {"power", SensorTypeCodes::other}}};
- 
- inline static std::string getSensorTypeStringFromPath(const std::string& path)
-@@ -208,11 +210,19 @@ inline static uint8_t getSensorNumberFromPath(const std::string& path)
+@@ -208,11 +208,18 @@ inline static uint8_t getSensorNumberFromPath(const std::string& path)
  {
      std::shared_ptr<SensorNumMap> sensorNumMapPtr;
      details::getSensorNumMap(sensorNumMapPtr);
@@ -52,7 +36,6 @@ index 8969bd6..87e1b10
      }
  
 +#if 0
-+    //ray__ print map
 +    for (auto& sensor : *sensorNumMapPtr) {
 +             std::cerr << sensor.left << " " << sensor.right <<  "\n";
 +    }
@@ -61,7 +44,7 @@ index 8969bd6..87e1b10
      try
      {
          return sensorNumMapPtr->right.at(path);
-@@ -227,7 +237,11 @@ inline static uint8_t getSensorNumberFromPath(const std::string& path)
+@@ -227,7 +234,11 @@ inline static uint8_t getSensorNumberFromPath(const std::string& path)
  inline static uint8_t getSensorEventTypeFromPath(const std::string& path)
  {
      // TODO: Add support for additional reading types as needed

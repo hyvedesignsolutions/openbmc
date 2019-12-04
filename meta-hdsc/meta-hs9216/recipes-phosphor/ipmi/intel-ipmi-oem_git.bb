@@ -8,9 +8,10 @@ SRC_URI = "git://github.com/openbmc/intel-ipmi-oem \
            file://0001-hs9216-disable-Intel-OEM-command.patch \
            file://0002-hs9216-force-scanned-fru-from-ID1.patch \
            file://0003-Add-SDR-type-3-support.patch \
-           file://0004-add-ipmi-type.patch \
-           file://0005-change-sel-to-non-volatile.patch \
-           file://0006-add-sel-clear-event.patch \
+           file://0004-change-sel-to-non-volatile.patch \
+           file://0005-add-sel-clear-event.patch \
+           file://0006-Add-support-to-custom-sensor-number.patch \
+           file://0007-add-ipmi-type.patch \         
            "
 SRCREV = "147daec5fcfcdacd8813eab6a7735d0f1b615c8a"
 
@@ -22,6 +23,9 @@ DEPENDS = "boost phosphor-ipmi-host phosphor-logging systemd intel-dbus-interfac
 inherit cmake obmc-phosphor-ipmiprovider-symlink
 
 EXTRA_OECMAKE="-DENABLE_TEST=0 -DYOCTO=1"
+
+#Enable custom sensor number
+TARGET_CFLAGS += " -DCUSTOM_SENSORNUMBER"
 
 LIBRARY_NAMES = "libzinteloemcmds.so"
 
