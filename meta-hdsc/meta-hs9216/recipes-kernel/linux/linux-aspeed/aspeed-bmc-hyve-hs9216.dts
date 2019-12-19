@@ -431,7 +431,7 @@
        "","","","","","","","",  /*X0-X7*/
        "","","","","","","","",  /*Y0-Y7*/
        "","","","","","","","",  /*Z0-Z7*/
-       "","","","","","","","",  /*AA0-AA7*/
+       "","","","","","FM_BIOS_POST_START_N","","FM_BIOS_POST_CMPLT_N",  /*AA0-AA7*/
        "","","","","","","","",  /*AB0-AB7*/
        "","","","","","","","";  /*AC0-AC7*/
       
@@ -465,4 +465,19 @@
         /*IH0-IH7*/     "","CPLD_VERSION_DECIMAL_BIT0","CPLD_VERSION_DECIMAL_BIT1","CPLD_VERSION_DECIMAL_BIT2","CPLD_VERSION_DECIMAL_BIT3","","","",
         /*II0-II7*/     "","","","","","","","",
         /*IJ0-IJ7*/     "","","","","","","","";
+};
+
+&ehci0
+{ 
+ status = "okay"; 
+};
+
+&ehci1 {  
+status = "okay"; 
+}
+;
+
+&uhci{  
+status = "okay"; 
+
 };

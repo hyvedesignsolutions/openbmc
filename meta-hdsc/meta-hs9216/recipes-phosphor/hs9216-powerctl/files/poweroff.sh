@@ -41,7 +41,13 @@ if [ $pwrstatus -eq 1 ]; then
     done    
     /usr/bin/gpioset gpiochip0 35=1
     sleep 1
+
     obmcutil chassisoff 
+
+    if [ -f "/var/tmp/poststart" ]; then
+        rm /var/tmp/poststart
+    fi
+
 
     Control_PT_funtion enable
 

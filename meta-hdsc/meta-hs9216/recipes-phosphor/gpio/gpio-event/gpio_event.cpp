@@ -12,9 +12,17 @@
 #include <boost/process.hpp>
 #include <iostream>
 
+#include <unistd.h>
 #include <sdbusplus/asio/object_server.hpp>
 
 #define BOOST_COROUTINES_NO_DEPRECATION_WARNING 
+
+#define HOST_SERVICE "xyz.openbmc_project.State.Host"
+#define HOST_OBJECTPATH_BASE "/xyz/openbmc_project/state/host0"
+#define HOST_BOOTPROGRESS_INTERFACE "xyz.openbmc_project.State.Boot.Progress"
+#define HOST_OPERATINGSYSTEM_INTERFACE "xyz.openbmc_project.State.OperatingSystem.Status"
+#define PROPERTY_INTERFACE "org.freedesktop.DBus.Properties"
+
 
 static constexpr char const* ipmiSELService =    "xyz.openbmc_project.Logging.IPMI";
 static constexpr char const* ipmiSELPath = "/xyz/openbmc_project/Logging/IPMI";
@@ -34,6 +42,7 @@ int main(int argc, char *argv[])
     boost::asio::io_service io;
     std::vector<uint8_t> eventData(3, 0xFF);
     std::string sensorPath;
+    auto bus = sdbusplus::bus::new_default();
     
 
 
@@ -43,8 +52,9 @@ int main(int argc, char *argv[])
     
     sensorPath=std::string("/xyz/openbmc_project/sensors/")+sensorType+std::string("/")+sensorName;
     std::printf("Sensorpath:%s\n",sensorPath.c_str());
-
-   if(strncmp(sensorName,"THERMAL_TRIP",12)==0)
+    std::string sensorNameString = sensorName;
+    std::string eventNameString = eventName;
+   if(sensorNameString == "THERMAL_TRIP")
    {
        //OEM byte2 ==cpu number
        int cpunum=0;
@@ -54,23 +64,72 @@ int main(int argc, char *argv[])
         * eventdata 2 --> thermal trip type
         * eventdata 3 --> cpunum 
         */ 
-       if(strncmp(eventName,"cputhermal",10)==0)
+       if(eventNameString == "cputhermal")
        {
            eventData[1]=0;  //00h CPU thermal trip
            sscanf(eventName,"cputhermal%x",&cpunum);
            eventData[2]=cpunum;
-       }else if(strncmp(eventName,"memorythermal",13)==0)
+       }else if(eventNameString == "memorythermal")
        {
            eventData[1]=1;  //01h Memory thermal trip
            sscanf(eventName,"memorythermal%x",&cpunum);
            eventData[2]=cpunum;
-       }else if(strncmp(eventName,"pchthermal",10)==0)
+       }else if(eventNameString == "pchthermal")
        {
            eventData[0]=2;  //01h PCH thermal trip
        }else{
            return 0;   //no event
        }
        
+   }
+   else if(sensorNameString == "SYS_BOOT_STATUS")
+   { 
+      std::string bootstate;
+      std::string operationstate;
+      auto method = bus.new_method_call(HOST_SERVICE,
+                                        HOST_OBJECTPATH_BASE, PROPERTY_INTERFACE, "Set");
+      if(eventNameString == "poststart")
+      {
+	  static int poststartflag = 0; //workaround fix to fix signal problem.
+
+	  if(access("/var/tmp/poststart", F_OK)==0)          
+          {
+              printf("event already trigger!");
+              return 0;
+          }
+
+          eventData[0] = 0x1;
+          eventData[1] = 0x3;
+          bootstate = "xyz.openbmc_project.State.Boot.Progress.ProgressStages.MotherboardInit";
+          operationstate = "xyz.openbmc_project.State.OperatingSystem.Status.OSStatus.Inactive";
+	  open("/var/tmp/poststart",O_RDONLY | O_CREAT, 0644);
+          
+      }else if(eventNameString == "postend")
+      {
+          eventData[0] = 0x1;
+          eventData[1] = 0x5;
+          //update boot progress          
+          bootstate = "xyz.openbmc_project.State.Boot.Progress.ProgressStages.OSStart";
+
+          // update operatingsystem state
+          operationstate = "xyz.openbmc_project.State.OperatingSystem.Status.OSStatus.BootComplete";
+
+	  unlink("/var/tmp/poststart");
+      }
+        
+      if(bootstate!="") 
+      {
+          std::cout << "Update boot Progress state\n"; 
+          method.append(HOST_BOOTPROGRESS_INTERFACE, "BootProgress",sdbusplus::message::variant<std::string>(bootstate));
+          bus.call_noreply(method);
+      }
+
+      if(operationstate!="") 
+      {
+          std::cout << "Update boot Progress state\n";
+          method.append(HOST_OPERATINGSYSTEM_INTERFACE, "OperatingSystemState",sdbusplus::message::variant<std::string>(operationstate));   
+          bus.call_noreply(method);
+      } 
    }
    //reservce for other sensor
    //else{

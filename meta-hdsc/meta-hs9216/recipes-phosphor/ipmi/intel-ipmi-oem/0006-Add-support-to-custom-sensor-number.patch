@@ -6,9 +6,9 @@ Subject: [PATCH] Add support to custom sensor number
 ---
  include/sdrutils.hpp       | 11 ++++++++
  include/sensorcommands.hpp | 21 +++++++++++++-
- include/sensormap.hpp      | 70 ++++++++++++++++++++++++++++++++++++++++++++++
+ include/sensormap.hpp      | 71 ++++++++++++++++++++++++++++++++++++++++++++++
  src/sensorcommands.cpp     | 13 ++++++++-
- 5 files changed, 116 insertions(+), 2 deletions(-)
+ 5 files changed, 117 insertions(+), 2 deletions(-)
  create mode 100644 include/sensormap.hpp
 
 diff --git a/include/sdrutils.hpp b/include/sdrutils.hpp
@@ -86,7 +86,7 @@ new file mode 100644
 index 0000000..9bacc2d
 --- /dev/null
 +++ b/include/sensormap.hpp
-@@ -0,0 +1,70 @@
+@@ -0,0 +1,71 @@
 +#ifdef CUSTOM_SENSORNUMBER
 +//Hyve Add for custom sensor number
 +const static boost::container::flat_map<std::string, uint8_t>
@@ -152,7 +152,8 @@ index 0000000..9bacc2d
 +        {"/xyz/openbmc_project/sensors/acpi/ACPI_POWER_STATE",0x82},
 +        {"/xyz/openbmc_project/sensors/powersupply/ACLost", 0x83},
 +        {"/xyz/openbmc_project/sensors/systemboot/MCReset", 0x84},
-+        {"/xyz/openbmc_project/sensors/processor/THERMAL_TRIP", 0xa3}
++        {"/xyz/openbmc_project/sensors/processor/THERMAL_TRIP", 0xa3},
++        {"/xyz/openbmc_project/sensors/systemevent/SYS_BOOT_STATUS", 0xa1}
 +}};
 +
 +
