@@ -1,0 +1,34 @@
+From 18fcd042a808f7adea77f9abc781275bde6e670f Mon Sep 17 00:00:00 2001
+From: JeannieWu <jeanniew@hyvedesignsolutions.com>
+Date: Mon, 23 Dec 2019 14:58:59 +0800
+Subject: [PATCH] Fix ipmi sel get issue
+
+---
+ src/sensorcommands.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/sensorcommands.cpp b/src/sensorcommands.cpp
+index 2f3fada..1b0474f 100755
+--- a/src/sensorcommands.cpp
++++ b/src/sensorcommands.cpp
+@@ -1292,7 +1292,7 @@ ipmi::RspType<uint16_t,            // next record ID
+         record.key.owner_lun = 0x0;
+         record.key.sensor_number = sensornumber;
+ 
+-        record.body.entity_id = 0x0;
++        record.body.entity_id = 0x7;
+         record.body.entity_instance = 0x01;
+         record.body.sensor_type = getSensorTypeFromPath(path);
+         record.body.event_reading_type = 0x6f;
+@@ -1348,7 +1348,7 @@ ipmi::RspType<uint16_t,            // next record ID
+     record.key.owner_lun = 0x0;
+     record.key.sensor_number = sensornumber;
+ 
+-    record.body.entity_id = 0x0;
++    record.body.entity_id = 0x7;
+     record.body.entity_instance = 0x01;
+     record.body.sensor_capabilities = 0x68; // auto rearm - todo hysteresis
+     record.body.sensor_type = getSensorTypeFromPath(path);
+-- 
+2.17.1
+

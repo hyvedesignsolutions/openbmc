@@ -11,7 +11,9 @@ SRC_URI = "git://github.com/openbmc/intel-ipmi-oem \
            file://0004-change-sel-to-non-volatile.patch \
            file://0005-add-sel-clear-event.patch \
            file://0006-Add-support-to-custom-sensor-number.patch \
-           file://0007-add-ipmi-type.patch \         
+           file://0007-add-ipmi-type.patch \        
+           file://0008-Fix-ipmi-sel-get-issue.patch \ 
+           file://0009-Handle-no-cachTimer-case-to-reduce-ipmi-command-respn.patch \
            "
 SRCREV = "147daec5fcfcdacd8813eab6a7735d0f1b615c8a"
 

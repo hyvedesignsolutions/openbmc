@@ -1,0 +1,26 @@
+From 7aca9c029698efecb2809dcb0b5fb47e15c94cfc Mon Sep 17 00:00:00 2001
+From: JeannieWu <jeanniew@hyvedesignsolutions.com>
+Date: Mon, 23 Dec 2019 16:22:42 +0800
+Subject: [PATCH] Handle no cachTimer case to reduce ipmi command respnose time
+
+---
+ src/storagecommands.cpp | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/storagecommands.cpp b/src/storagecommands.cpp
+index c02e828..8560de9 100644
+--- a/src/storagecommands.cpp
++++ b/src/storagecommands.cpp
+@@ -147,7 +147,11 @@ ipmi_ret_t replaceCacheFru(uint8_t devId)
+     static uint8_t lastDevId = 0xFF;
+ 
+     bool timerRunning = (cacheTimer != nullptr) && !cacheTimer->isExpired();
+-    if (lastDevId == devId && timerRunning)
++    if (lastDevId == devId && cacheTimer == nullptr) 
++    {
++        return IPMI_CC_OK;
++    }
++    else if (lastDevId == devId && timerRunning)
+     {
+         return IPMI_CC_OK; // cache already up to date
+     }
