@@ -1,0 +1,73 @@
+[
+    {
+        "Exposes": [
+            {
+                "Address": "$address",
+                "Bus": "$bus",
+                "Name": "Delta DPS-500AB PSU FRU",
+                "Type": "EEPROM"
+            },
+            {
+                "Address": "0x58",
+                "Bus": "$bus",
+                "Name": "PSU",
+                "Labels": ["pin", "pout1", "vin", "vout1", "iin", "iout1", "temp1", "fan1"],
+                "Thresholds": [
+                    {
+                        "Direction": "greater than",
+                        "Label": "pin",
+                        "Name": "upper critical",
+                        "Severity": 1,
+                        "Value": 750
+                    },
+                    {
+                        "Direction": "greater than",
+                        "Label": "iout1",
+                        "Name": "upper critical",
+                        "Severity": 1,
+                        "Value": 52
+                    },
+                    {
+                        "Direction": "greater than",
+                        "Label": "iin",
+                        "Name": "upper critical",
+                        "Severity": 1,
+                        "Value": 4.25
+                    },
+                    {
+                        "Direction": "greater than",
+                        "Label": "vout1",
+                        "Name": "upper critical",
+                        "Severity": 1,
+                        "Value": 12.625
+                    },
+                    {
+                        "Direction": "greater than",
+                        "Label": "vin",
+                        "Name": "upper critical",
+                        "Severity": 1,
+                        "Value": 264.18
+                    },
+                    {
+                        "Direction": "less than",
+                        "Label": "vin",
+                        "Name": "lower critical",
+                        "Severity": 1,
+                        "Value": 81.03
+                    }
+                ],
+                "Type": "pmbus"
+            }
+        ],
+        "Name": "Delta DPS-750AB PSU",
+        "Probe": "xyz.openbmc_project.FruDevice({'PRODUCT_PRODUCT_NAME': '.*DPS-750*'})",
+        "Type": "PowerSupply",
+        "xyz.openbmc_project.Inventory.Decorator.Asset": {
+            "Manufacturer": "$PRODUCT_MANUFACTURER",
+            "Model": "$PRODUCT_PRODUCT_NAME",
+            "PartNumber": "$PRODUCT_PART_NUMBER",
+            "SerialNumber": "$PRODUCT_SERIAL_NUMBER"
+        }
+    }
+]
+

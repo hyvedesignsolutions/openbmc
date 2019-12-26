@@ -1,0 +1,185 @@
+From 9944fc5d7023db069dd35d7609cf56c0f3ae4066 Mon Sep 17 00:00:00 2001
+From: Jeannie Wu <jeanniew@hyvedesignsolutions.com>
+Date: Tue, 3 Dec 2019 15:47:19 +0800
+Subject: [PATCH] Add support to custom sensor number
+
+---
+ include/sdrutils.hpp       | 11 ++++++++
+ include/sensorcommands.hpp | 21 +++++++++++++-
+ include/sensormap.hpp      | 71 ++++++++++++++++++++++++++++++++++++++++++++++
+ src/sensorcommands.cpp     | 13 ++++++++-
+ 5 files changed, 117 insertions(+), 2 deletions(-)
+ create mode 100644 include/sensormap.hpp
+
+diff --git a/include/sdrutils.hpp b/include/sdrutils.hpp
+index 16c50ee..a643e78 100755
+--- a/include/sdrutils.hpp
++++ b/include/sdrutils.hpp
+@@ -20,6 +20,7 @@
+ #include <cstring>
+ #include <phosphor-logging/log.hpp>
+ #include <sdbusplus/bus/match.hpp>
++#include <sensormap.hpp>
+ 
+ #pragma once
+ 
+@@ -124,8 +125,18 @@ inline static bool getSensorNumMap(std::shared_ptr<SensorNumMap>& sensorNumMap)
+     uint8_t sensorNum = 0;
+     for (const auto& sensor : *sensorTree)
+     {
++#ifdef CUSTOM_SENSORNUMBER
++        auto findsensorNum = numberTable.find(sensor.first);
++        if( findsensorNum != numberTable.end())
++        {
++            sensorNum = static_cast<uint8_t>(findsensorNum->second);
++            sensorNumMapPtr->insert(
++                SensorNumMap::value_type(sensorNum, sensor.first));
++        }
++#else
+         sensorNumMapPtr->insert(
+             SensorNumMap::value_type(sensorNum++, sensor.first));
++#endif          
+     }
+     sensorNumMap = sensorNumMapPtr;
+     sensorNumMapUpated = true;
+diff --git a/include/sensorcommands.hpp b/include/sensorcommands.hpp
+index 7eab327..517d41d 100644
+--- a/include/sensorcommands.hpp
++++ b/include/sensorcommands.hpp
+@@ -114,6 +114,25 @@ static ipmi_ret_t getSensorConnection(uint8_t sensnum, std::string &connection,
+         return IPMI_CC_RESPONSE_ERROR;
+     }
+ 
++#ifdef CUSTOM_SENSORNUMBER
++    //std::cout << "connection sensnum=" << sensnum;
++    auto findpath = std::find_if(numberTable.begin(), numberTable.end(),
++        [sensnum](const std::map<std::string, uint8_t>::value_type item)
++    {
++        return item.second == sensnum;
++    });
++
++    if(findpath != numberTable.end())
++    {
++        path = (*findpath).first;
++        //std::cout << " connection sensorpath=" << path << "\n";
++    }else
++        std::cout << " no match sensor\n";
++
++    auto findconnect = sensorTree.find(path);
++    if(findconnect != sensorTree.end())
++        connection = findconnect->second.begin()->first;
++#else
+     if (sensorTree.size() < (sensnum + 1))
+     {
+         return IPMI_CC_INVALID_FIELD_REQUEST;
+@@ -133,7 +152,7 @@ static ipmi_ret_t getSensorConnection(uint8_t sensnum, std::string &connection,
+             break;
+         }
+     }
+-
++#endif
+     return 0;
+ }
+ 
+diff --git a/include/sensormap.hpp b/include/sensormap.hpp
+new file mode 100644
+index 0000000..9bacc2d
+--- /dev/null
++++ b/include/sensormap.hpp
+@@ -0,0 +1,71 @@
++#ifdef CUSTOM_SENSORNUMBER
++//Hyve Add for custom sensor number
++const static boost::container::flat_map<std::string, uint8_t>
++    numberTable{{
++        {"/xyz/openbmc_project/sensors/temperature/TEMP_AMB_0",0x1},
++        {"/xyz/openbmc_project/sensors/temperature/TEMP_AMB_1",0x2},
++        {"/xyz/openbmc_project/sensors/temperature/PCH_Temp",0x5},
++        {"/xyz/openbmc_project/sensors/voltage/VOL_SYS_V",0xe},
++        {"/xyz/openbmc_project/sensors/voltage/VOL_SYS_3_3V",0xf},
++        {"/xyz/openbmc_project/sensors/voltage/VOL_PCH_VNN", 0x10},
++        {"/xyz/openbmc_project/sensors/voltage/VOL_PCH_1_05V",0x11},
++        {"/xyz/openbmc_project/sensors/voltage/VOL_3_3V_AUX", 0x12},
++        {"/xyz/openbmc_project/sensors/voltage/VOL_5V_AUX", 0x13},
++        {"/xyz/openbmc_project/sensors/voltage/VOL_PCH_1_8V", 0x14},
++        {"/xyz/openbmc_project/sensors/voltage/VOL_BATTERY", 0x15},
++        {"/xyz/openbmc_project/sensors/voltage/VOL_CPU0_VCORE",0x16},
++        {"/xyz/openbmc_project/sensors/voltage/VOL_CPU1_VCORE",0x17},
++        {"/xyz/openbmc_project/sensors/voltage/VOL_DIMM_ABC",0x18},
++        {"/xyz/openbmc_project/sensors/voltage/VOL_DIMM_DEF",0x19},
++        {"/xyz/openbmc_project/sensors/voltage/VOL_DIMM_GHJ",0x1a},
++        {"/xyz/openbmc_project/sensors/voltage/VOL_DIMM_KLM",0x1b},
++        {"/xyz/openbmc_project/sensors/voltage/VOL_SYS0_VCCIO", 0x1c},
++        {"/xyz/openbmc_project/sensors/voltage/VOL_SYS1_VCCIO", 0x1d},
++        {"/xyz/openbmc_project/sensors/temperature/Die_CPU1",0x25},
++        {"/xyz/openbmc_project/sensors/temperature/Die_CPU1",0x27},
++        {"/xyz/openbmc_project/sensors/temperature/DIMM_A0_CPU0",0x29},
++        {"/xyz/openbmc_project/sensors/temperature/DIMM_A1_CPU0",0x2a},
++        {"/xyz/openbmc_project/sensors/temperature/DIMM_B0_CPU0",0x2b},
++        {"/xyz/openbmc_project/sensors/temperature/DIMM_C0_CPU0",0x2c},
++        {"/xyz/openbmc_project/sensors/temperature/DIMM_D0_CPU0",0x2d},
++        {"/xyz/openbmc_project/sensors/temperature/DIMM_D1_CPU0",0x2e},
++        {"/xyz/openbmc_project/sensors/temperature/DIMM_E0_CPU0",0x2f},
++        {"/xyz/openbmc_project/sensors/temperature/DIMM_F0_CPU0",0x30},
++        {"/xyz/openbmc_project/sensors/temperature/DIMM_A0_CPU1",0x31},
++        {"/xyz/openbmc_project/sensors/temperature/DIMM_A1_CPU1",0x32},
++        {"/xyz/openbmc_project/sensors/temperature/DIMM_B0_CPU1",0x33},
++        {"/xyz/openbmc_project/sensors/temperature/DIMM_C0_CPU1",0x34},
++        {"/xyz/openbmc_project/sensors/temperature/DIMM_D0_CPU1",0x35},
++        {"/xyz/openbmc_project/sensors/temperature/DIMM_D1_CPU1",0x36},
++        {"/xyz/openbmc_project/sensors/temperature/DIMM_E0_CPU1",0x37},
++        {"/xyz/openbmc_project/sensors/temperature/DIMM_F0_CPU1",0x38},
++        {"/xyz/openbmc_project/sensors/temperature/PSU_TEMP", 0x42},
++        {"/xyz/openbmc_project/sensors/power/PSU_Power_In", 0x43},
++        {"/xyz/openbmc_project/sensors/fan_tach/PSU_Fan", 0x44},
++        {"/xyz/openbmc_project/sensors/voltage/PSU_Voltage_In",0x45},
++        {"/xyz/openbmc_project/sensors/voltage/PSU_Voltage_Out", 0x46},
++        {"/xyz/openbmc_project/sensors/current/PSU_Current_Out",0x47},
++        {"/xyz/openbmc_project/sensors/power/PSU_Power_Out", 0x48},
++        {"/xyz/openbmc_project/sensors/current/PSU_Current_In",0x49},
++        {"/xyz/openbmc_project/sensors/processor/CATERR", 0x53},
++        {"/xyz/openbmc_project/sensors/logevent/SYSTEM_EVENT_LOG", 0x59},
++        {"/xyz/openbmc_project/sensors/fan_tach/FAN_0",0x74},
++        {"/xyz/openbmc_project/sensors/fan_tach/FAN_1",0x75},
++        {"/xyz/openbmc_project/sensors/fan_tach/FAN_2",0x76},
++        {"/xyz/openbmc_project/sensors/fan_tach/FAN_3",0x77},
++        {"/xyz/openbmc_project/sensors/fan_tach/FAN_4",0x78},
++        {"/xyz/openbmc_project/sensors/fan_tach/FAN_5",0x79},
++        {"/xyz/openbmc_project/sensors/fan_tach/FAN_6",0x7a},
++        {"/xyz/openbmc_project/sensors/fan_tach/FAN_7",0x7b},
++        {"/xyz/openbmc_project/sensors/fan_tach/FAN_8",0x7c},
++        {"/xyz/openbmc_project/sensors/fan_tach/FAN_9",0x7d},
++        {"/xyz/openbmc_project/sensors/systemboot/SYSTEM_RESTART",0x81},
++        {"/xyz/openbmc_project/sensors/acpi/ACPI_POWER_STATE",0x82},
++        {"/xyz/openbmc_project/sensors/powersupply/ACLost", 0x83},
++        {"/xyz/openbmc_project/sensors/systemboot/MCReset", 0x84},
++        {"/xyz/openbmc_project/sensors/processor/THERMAL_TRIP", 0xa3},
++        {"/xyz/openbmc_project/sensors/systemevent/SYS_BOOT_STATUS", 0xa1}
++}};
++
++
++#endif
+diff --git a/src/sensorcommands.cpp b/src/sensorcommands.cpp
+index 4fd97df..2f3fada 100755
+--- a/src/sensorcommands.cpp
++++ b/src/sensorcommands.cpp
+@@ -1264,8 +1264,19 @@ ipmi::RspType<uint16_t,            // next record ID
+     {
+         return ipmi::responseResponseError();
+     }
++#ifdef CUSTOM_SENSORNUMBER
++    uint8_t sensornumber = 0;
++ 
++    //Hyve modified for custom sensor number
++    auto findsensorNum = numberTable.find(path);
++    if( findsensorNum != numberTable.end())
++    {
++        sensornumber = static_cast<uint8_t>(findsensorNum->second);
++        //std::cerr << "debug : sensorpath:" << path << "  sensornum = " << sensornumber << "\n";
++    }
++#else
+     uint8_t sensornumber = (recordID & 0xFF);
+-
++#endif
+     //MCT event only hook
+     if(getSensorEventTypeFromPath(path) == 0x6f)
+     {

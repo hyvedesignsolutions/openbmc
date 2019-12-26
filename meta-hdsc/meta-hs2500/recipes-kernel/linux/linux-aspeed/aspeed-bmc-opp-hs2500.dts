@@ -1,0 +1,454 @@
+// SPDX-License-Identifier: GPL-2.0+
+/dts-v1/;
+#include "aspeed-g5.dtsi"
+#include <dt-bindings/gpio/aspeed-gpio.h>
+
+/ {
+	model = "HS2500 BMC";
+	compatible = "hdsc,hs2500-bmc", "aspeed,ast2500";
+
+	chosen {
+		stdout-path = &uart5;
+		bootargs = "console=ttyS4,115200 earlyprintk";
+	};
+
+	memory@80000000 {
+		reg = <0x80000000 0x20000000>;
+	};
+
+	reserved-memory {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges;
+
+		vga_memory: framebuffer@9f000000 {
+			no-map;
+			reg = <0x9f000000 0x01000000>; /* 16M */
+		};
+
+		flash_memory: region@98000000 {
+			no-map;
+			reg = <0x98000000 0x02000000>; /* 32M */
+		};
+		
+		gfx_memory: framebuffer {
+			size = <0x01000000>;
+			alignment = <0x01000000>;
+			compatible = "shared-dma-pool";
+			reusable;
+		};
+
+		video_engine_memory: jpegbuffer {
+			size = <0x02000000>;	/* 32M */
+			alignment = <0x01000000>;
+			compatible = "shared-dma-pool";
+			reusable;
+		};
+	};
+
+	leds {
+		compatible = "gpio-leds";
+
+		fault {
+			gpios = <&gpio ASPEED_GPIO(Y, 1) GPIO_ACTIVE_HIGH>;
+		};
+
+		identify {
+			gpios = <&gpio ASPEED_GPIO(Y, 0) GPIO_ACTIVE_HIGH>;
+		};
+
+		power {
+			gpios = <&gpio ASPEED_GPIO(D, 0) GPIO_ACTIVE_HIGH>;
+		};
+
+		A1 {
+			gpios = <&gpio ASPEED_GPIO(A, 0) GPIO_ACTIVE_HIGH>;
+		};
+
+		B1 {
+			gpios = <&gpio ASPEED_GPIO(A, 1) GPIO_ACTIVE_HIGH>;
+		};
+
+		C1 {
+			// Pin mux with NCTS3
+			gpios = <&gpio ASPEED_GPIO(E, 0) GPIO_ACTIVE_HIGH>;
+		};
+
+		D1 {
+			gpios = <&gpio ASPEED_GPIO(A, 3) GPIO_ACTIVE_HIGH>;
+		};
+
+		E1 {
+			gpios = <&gpio ASPEED_GPIO(D, 2) GPIO_ACTIVE_HIGH>;
+		};
+
+		F1 {
+			gpios = <&gpio ASPEED_GPIO(D, 6) GPIO_ACTIVE_HIGH>;
+		};
+		
+		/* Pin mux with RGMII1_TXD3 */
+		G1 {
+			gpios = <&gpio ASPEED_GPIO(T, 5) GPIO_ACTIVE_HIGH>;
+		};
+
+		A2 {
+			gpios = <&gpio ASPEED_GPIO(H, 0) GPIO_ACTIVE_HIGH>;
+		};
+
+		B2 {
+			gpios = <&gpio ASPEED_GPIO(H, 1) GPIO_ACTIVE_HIGH>;
+		};
+
+		C2 {
+			gpios = <&gpio ASPEED_GPIO(H, 2) GPIO_ACTIVE_HIGH>;
+		};
+
+		D2 {
+			gpios = <&gpio ASPEED_GPIO(G, 7) GPIO_ACTIVE_HIGH>;
+		};
+
+		/* Pin mux with RGMII1RXCTL */
+		E2 {
+			gpios = <&gpio ASPEED_GPIO(U, 5) GPIO_ACTIVE_HIGH>;
+		};
+
+		F2 {
+			gpios = <&gpio ASPEED_GPIO(D, 5) GPIO_ACTIVE_HIGH>;
+		};
+
+                D1601 {
+                       gpios = <&pca9554 0 GPIO_ACTIVE_LOW>;
+                };
+
+                D1602 {
+                       gpios = <&pca9554 1 GPIO_ACTIVE_LOW>;
+                };
+
+                D1603 {
+                       gpios = <&pca9554 2 GPIO_ACTIVE_LOW>;
+                };
+
+                D1604 {
+                       gpios = <&pca9554 3 GPIO_ACTIVE_LOW>;
+                };
+
+                D1605 {
+                       gpios = <&pca9554 4 GPIO_ACTIVE_LOW>;
+                };
+
+                D1606 {
+                       gpios = <&pca9554 5 GPIO_ACTIVE_LOW>;
+                };
+
+                D1607 {
+                       gpios = <&pca9554 6 GPIO_ACTIVE_LOW>;
+                };
+
+                D1608 {
+                       gpios = <&pca9554 7 GPIO_ACTIVE_LOW>;
+                };
+	};
+
+	gpio-keys {
+		compatible = "gpio-keys";
+
+		lamp-test {
+			label = "lamp-test";
+			gpios = <&gpio ASPEED_GPIO(G, 1) GPIO_ACTIVE_LOW>;
+			linux,code = <ASPEED_GPIO(G, 1)>;
+		};
+
+		fan-test {
+			label = "fan-test";
+			gpios = <&gpio ASPEED_GPIO(G, 4) GPIO_ACTIVE_LOW>;
+			linux,code = <ASPEED_GPIO(G, 4)>;
+		};
+	};
+
+	iio-hwmon-1_8v {
+		compatible = "iio-hwmon";
+		io-channels = <&adc 0>;
+	};
+
+	iio-hwmon-1_7v {
+		compatible = "iio-hwmon";
+		io-channels = <&adc 1>;
+	};
+
+	iio-hwmon-1_1v {
+		compatible = "iio-hwmon";
+		io-channels = <&adc 2>;
+	};
+
+	iio-hwmon-0_825v {
+		compatible = "iio-hwmon";
+		io-channels = <&adc 3>;
+	};
+
+	iio-hwmon-adc4 {
+		compatible = "iio-hwmon";
+		io-channels = <&adc 4>;
+	};
+
+	iio-hwmon-adc5 {
+		compatible = "iio-hwmon";
+		io-channels = <&adc 5>;
+	};
+
+	iio-hwmon-adc6 {
+		compatible = "iio-hwmon";
+		io-channels = <&adc 6>;
+	};
+
+	iio-hwmon-adc7 {
+		compatible = "iio-hwmon";
+		io-channels = <&adc 7>;
+	};
+};
+
+&fmc {
+	status = "okay";
+	flash@0 {
+		status = "okay";
+		m25p,fast-read;
+		label = "bmc";
+		spi-max-frequency = <50000000>;
+#include "openbmc-flash-layout.dtsi"
+	};
+};
+
+&spi1 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_spi1_default>;
+
+	flash@0 {
+		status = "okay";
+		m25p,fast-read;
+		label = "pnor";
+		spi-max-frequency = <100000000>;
+	};
+};
+
+&lpc_ctrl {
+	status = "okay";
+	memory-region = <&flash_memory>;
+	flash = <&spi1>;
+};
+
+&uart1 {
+	/* Rear RS-232 connector */
+	status = "okay";
+
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_txd1_default
+			&pinctrl_rxd1_default
+			&pinctrl_nrts1_default
+			&pinctrl_ndtr1_default
+			&pinctrl_ndsr1_default
+			&pinctrl_ncts1_default
+			&pinctrl_ndcd1_default
+			&pinctrl_nri1_default>;
+};
+
+&uart5 {
+	status = "okay";
+};
+
+&mac0 {
+	status = "okay";
+
+    use-ncsi;
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_rmii1_default &pinctrl_mdio1_default>;
+};
+
+&mac1 {
+	status = "okay";
+
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_rgmii2_default &pinctrl_mdio2_default>;
+};
+
+&i2c0 {
+	status = "okay";
+};
+
+&i2c1 {
+	status = "okay";
+};
+
+&i2c2 {
+	status = "okay";
+};
+
+&i2c3 {
+	status = "okay";
+
+        eeprom@50 {
+		compatible = "atmel,24c64";
+		reg = <0x50>;
+		pagesize = <32>;
+	};
+};
+
+&i2c4 {
+	status = "okay";
+};
+
+&i2c5 {
+	status = "okay";
+};
+
+&i2c6 {
+	status = "okay";
+};
+
+&i2c7 {
+	status = "okay";
+};
+
+&i2c8 {
+	status = "okay";
+};
+
+&i2c9 {
+	status = "okay";
+};
+
+&i2c10 {
+	status = "okay";
+
+        ina219@40 {
+                  compatible = "ti,ina219";
+                  reg = <0x40>;
+                  shunt-resistor = <2000>;
+        };
+
+        ina219@41 {
+                  compatible = "ti,ina219";
+                  reg = <0x41>;
+                  shunt-resistor = <2000>;
+        };
+
+        pca9555@21 {
+		compatible = "nxp,pca9555";
+		reg = <0x21>;
+
+		gpio-controller;
+		#gpio-cells = <2>;
+	};
+
+        pca9554: pca9554@38 {
+		compatible = "nxp,pca9554";
+		reg = <0x38>;
+
+		gpio-controller;
+		#gpio-cells = <2>;
+	};
+};
+
+&i2c11 {
+	status = "okay";
+
+        tmp75@48 {
+                 compatible = "st,stlm75";
+                 reg = <0x48>;
+        };
+
+        i2c-switch@70 {
+		compatible = "nxp,pca9548";
+		#address-cells = <1>;
+		#size-cells = <0>;
+		reg = <0x70>;
+                reset-gpios = <&gpio ASPEED_GPIO(D, 1) GPIO_ACTIVE_LOW>;
+        };
+};
+
+&i2c12 {
+	status = "okay";
+
+        tmp75@4a {
+                 compatible = "st,stlm75";
+                 reg = <0x4a>;
+        };
+
+        eeprom@51 {
+		compatible = "st,24c64", "atmel,24c64";
+		reg = <0x51>;
+		pagesize = <32>;
+	};
+};
+
+&gpio {
+	BCM5221_RST {
+		gpio-hog;
+		gpios = <ASPEED_GPIO(D, 4) GPIO_ACTIVE_HIGH>;
+		output-high;
+		line-name = "phy_BCM5221_RST";
+	};
+
+    BCM54612_RST {
+		gpio-hog;
+		gpios = <ASPEED_GPIO(AA, 7) GPIO_ACTIVE_HIGH>;
+		output-high;
+		line-name = "phy_BCM54612_RST";
+	};	
+};
+
+&vuart {
+	status = "okay";
+};
+
+&gfx {
+	status = "okay";
+	memory-region = <&gfx_memory>;
+};
+
+&pinctrl {
+	aspeed,external-nodes = <&gfx &lhc>;
+};
+
+&pwm_tacho {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_pwm0_default &pinctrl_pwm1_default
+        &pinctrl_pwm2_default &pinctrl_pwm3_default>;
+
+	fan@0 {
+		reg = <0x00>;
+		aspeed,fan-tach-ch = /bits/ 8 <0x00>;
+	};
+
+	fan@1 {
+		reg = <0x01>;
+		aspeed,fan-tach-ch = /bits/ 8 <0x01>;
+	};
+
+	fan@2 {
+		reg = <0x02>;
+		aspeed,fan-tach-ch = /bits/ 8 <0x02>;
+	};
+
+	fan@3 {
+		reg = <0x03>;
+		aspeed,fan-tach-ch = /bits/ 8 <0x03>;
+	};
+};
+
+&ibt {
+	status = "okay";
+};
+
+&vhub {
+	status = "okay";
+};
+
+&adc {
+	status = "okay";
+};
+
+&video {
+	status = "okay";
+	memory-region = <&video_engine_memory>;
+};

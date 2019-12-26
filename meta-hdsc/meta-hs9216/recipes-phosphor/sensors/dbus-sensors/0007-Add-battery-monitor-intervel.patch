@@ -1,0 +1,51 @@
+diff --git a/src/ADCSensor.cpp b/src/ADCSensor.cpp
+index 4aa8cc1..41d0bca 100644
+--- a/src/ADCSensor.cpp
++++ b/src/ADCSensor.cpp
+@@ -30,14 +30,15 @@
+ #include <string>
+ static constexpr unsigned int sensorPollMs = 500;
+ static constexpr size_t warnAfterErrorCount = 10;
+-static constexpr unsigned int gpioBridgeEnableMs = 20;
++//Hyve modified to monitor battery sensor one time/day
++static constexpr unsigned int gpioBridgeEnableMs = 86400000;
+ // scaling factor from hwmon
+ static constexpr unsigned int sensorScaleFactor = 1000;
+
+ static constexpr double roundFactor = 10000; // 3 decimal places
+ static constexpr double maxReading = 20;
+ static constexpr double minReading = 0;
+-
++int firstflag=0;
+ ADCSensor::ADCSensor(const std::string& path,
+                      sdbusplus::asio::object_server& objectServer,
+                      std::shared_ptr<sdbusplus::asio::connection>& conn,
+@@ -93,7 +94,18 @@ void ADCSensor::setupRead(void)
+ {
+     if (bridgeGpio.has_value())
+     {
+-        (*bridgeGpio).set(1);
++        if(!firstflag)
++        {
++            firstflag=1;
++            (*bridgeGpio).set(1);
++            sleep(1);
++            boost::asio::async_read_until(
++                inputDev, readBuf, '\n',
++                [&](const boost::system::error_code& ec,
++                    std::size_t /*bytes_transfered*/) { handleResponse(ec); });
++        }
++        //Change to set value after gpiobridgeenablems reach
++        //(*bridgeGpio).set(1);
+         // In case a channel has a bridge circuit,we have to turn the bridge on
+         // prior to reading a value at least for one scan cycle to get a valid
+         // value. Guarantee that the HW signal can be stable, the HW signal
+@@ -105,6 +117,8 @@ void ADCSensor::setupRead(void)
+             {
+                 return; // we're being canceled
+             }
++            (*bridgeGpio).set(1);
++            sleep(1);
+             boost::asio::async_read_until(
+                 inputDev, readBuf, '\n',
+                 [&](const boost::system::error_code& ec,

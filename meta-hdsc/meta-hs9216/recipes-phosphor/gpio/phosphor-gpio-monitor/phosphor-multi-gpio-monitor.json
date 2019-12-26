@@ -1,0 +1,58 @@
+[
+        {
+                "Name": "CPU0_THERMALTRIP_N",
+                "LineName": "CPU0_THERMALTRIP_N",
+                "EventMon": "FALLING",
+                "ChipId": "gpiochip1",
+                "Continue": true,
+                "Target": "xyz.openbmc_project.gpio-event@processor-THERMAL_TRIP-cputhermal0.service"
+        },
+        {
+                "Name": "CPU1_THERMALTRIP_N",
+                "LineName": "CPU1_THERMALTRIP_N",
+                "EventMon": "FALLING",
+                "ChipId": "gpiochip1",
+                "Continue": true,
+                "Target": "xyz.openbmc_project.gpio-event@processor-THERMAL_TRIP-cputhermal1.service"
+        },
+        {
+                "Name": "CPU0_MEMORY_THERMALTRIP_N",
+                "LineName": "CPU0_MEMORY_THERMALTRIP_N",
+                "EventMon": "FALLING",
+                "ChipId": "gpiochip1",
+                "Continue": true,
+                "Target": "xyz.openbmc_project.gpio-event@processor-THERMAL_TRIP-memorythermal0.service"
+        },
+        {
+                "Name": "CPU1_MEMORY_THERMALTRIP_N",
+                "LineName": "CPU1_MEMORY_THERMALTRIP_N",
+                "EventMon": "FALLING",
+                "ChipId": "gpiochip1",
+                "Continue": true,
+                "Target": "xyz.openbmc_project.gpio-event@processor-THERMAL_TRIP-memorythermal1.service"
+        },
+        {
+                "Name": "PCH_THERMALTRIP_N",
+                "LineName": "PCH_THERMALTRIP_N",
+                "ChipId": "gpiochip0",
+                "EventMon": "FALLING",
+                "Continue": true,
+                "Target": "xyz.openbmc_project.gpio-event@processor-THERMAL_TRIP-pchthermal.service"
+        },
+        {
+                "Name": "FM_BIOS_POST_START_N",
+                "LineName": "FM_BIOS_POST_START_N",
+                "ChipId": "gpiochip0",
+                "EventMon": "FALLING",
+                "Continue": true,
+                "Target": "xyz.openbmc_project.gpio-event@systemevent-SYS_BOOT_STATUS-poststart.service"
+        },
+        {
+                "Name": "FM_BIOS_POST_CMPLT_N",
+                "LineName": "FM_BIOS_POST_CMPLT_N",
+                "ChipId": "gpiochip0",
+                "EventMon": "FALLING",
+                "Continue": true,
+                "Target": "xyz.openbmc_project.gpio-event@systemevent-SYS_BOOT_STATUS-postend.service"
+        }
+]

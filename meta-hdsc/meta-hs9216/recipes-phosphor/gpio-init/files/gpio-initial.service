@@ -1,0 +1,10 @@
+[Unit]
+Description=Initial GPIO Settings
+
+[Service]
+ExecStart=/usr/sbin/gpio-initial.sh
+Type=simple
+SyslogIdentifier=gpio-initial
+
+[Install]
+WantedBy=sysinit.target

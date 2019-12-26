@@ -1,0 +1,159 @@
+From 5a4e7c86a51aca653f295e1f4e76f18bff4674ec Mon Sep 17 00:00:00 2001
+From: Jeannie Wu <jeanniew@hyvedesignsolutions.com>
+Date: Thu, 31 Oct 2019 16:31:00 +0800
+Subject: [PATCH] Add SDR only sensor
+
+---
+ CMakeLists.txt                                     | 14 ++++
+ .../xyz.openbmc_project.sdronlysensor.service      | 12 ++++
+ src/SDROnlySensorMain.cpp                          | 79 ++++++++++++++++++++++
+ 3 files changed, 105 insertions(+)
+ create mode 100644 service_files/xyz.openbmc_project.sdronlysensor.service
+ create mode 100644 src/SDROnlySensorMain.cpp
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index dd069b3..d55ce3f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -48,6 +48,7 @@ option (DISABLE_PSU "Disable installing PSU sensor" OFF)
+ option (DISABLE_PROCESSOR "Disable installing processor sensor" OFF)
+ option (DISABLE_ACPI "Disable installing acpi sensor" OFF)
+ option (DISABLE_POWERSUPPLY "Disable installing powersupply sensor" OFF)
++option (DISABLE_SDRONLY "Disable installing sdr for sdronly sensor" OFF)
+ 
+ include ("cmake/HunterGate.cmake")
+ 
+@@ -205,6 +206,10 @@ add_executable (powersupplysensor src/PowerSupplySensorMain.cpp)
+ add_dependencies (powersupplysensor sdbusplus-project)
+ target_link_libraries (powersupplysensor ${SENSOR_LINK_LIBS})
+ 
++add_executable (sdronlysensor src/SDROnlySensorMain.cpp)
++add_dependencies (sdronlysensor sdbusplus-project)
++target_link_libraries (sdronlysensor ${SENSOR_LINK_LIBS})
++
+ if (NOT YOCTO)
+     add_dependencies (adcsensor ${EXTERNAL_PACKAGES})
+     add_dependencies (cpusensor ${EXTERNAL_PACKAGES})
+@@ -218,6 +223,7 @@ if (NOT YOCTO)
+     add_dependencies (processorsensor ${EXTERNAL_PACKAGES})
+     add_dependencies (acpisensor ${EXTERNAL_PACKAGES})
+     add_dependencies (powersupplysensor ${EXTERNAL_PACKAGES})
++    add_dependencies (sdronlysensor ${EXTERNAL_PACKAGES})
+ endif ()
+ 
+ set (SERVICE_FILE_SRC_DIR ${PROJECT_SOURCE_DIR}/service_files)
+@@ -313,3 +319,11 @@ if (NOT DISABLE_POWERSUPPLY)
+                  ${SERVICE_FILE_SRC_DIR}/xyz.openbmc_project.powersupplysensor.service
+                  DESTINATION ${SERVICE_FILE_INSTALL_DIR})
+ endif ()
++
++if (NOT DISABLE_SDRONLY)
++    install (TARGETS sdronlysensor DESTINATION bin)
++    install (FILES
++                 ${SERVICE_FILE_SRC_DIR}/xyz.openbmc_project.sdronlysensor.service
++                 DESTINATION ${SERVICE_FILE_INSTALL_DIR})
++endif ()
++
+diff --git a/service_files/xyz.openbmc_project.sdronlysensor.service b/service_files/xyz.openbmc_project.sdronlysensor.service
+new file mode 100644
+index 0000000..672761b
+--- /dev/null
++++ b/service_files/xyz.openbmc_project.sdronlysensor.service
+@@ -0,0 +1,12 @@
++[Unit]
++Description=SDROnly Sensor (for Eventonly Type)
++StopWhenUnneeded=false
++
++[Service]
++Restart=always
++RestartSec=5
++StartLimitBurst=10
++ExecStart=/usr/bin/sdronlysensor
++
++[Install]
++WantedBy=multi-user.target
+diff --git a/src/SDROnlySensorMain.cpp b/src/SDROnlySensorMain.cpp
+new file mode 100644
+index 0000000..0880dbe
+--- /dev/null
++++ b/src/SDROnlySensorMain.cpp
+@@ -0,0 +1,79 @@
++/*
++// Copyright (c) 2018 Intel Corporation
++//
++// Licensed under the Apache License, Version 2.0 (the "License");
++// you may not use this file except in compliance with the License.
++// You may obtain a copy of the License at
++//
++//      http://www.apache.org/licenses/LICENSE-2.0
++//
++// Unless required by applicable law or agreed to in writing, software
++// distributed under the License is distributed on an "AS IS" BASIS,
++// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++// See the License for the specific language governing permissions and
++// limitations under the License.
++*/
++
++//#include <GPIOSensor.hpp>
++#include <Utils.hpp>
++#include <boost/algorithm/string/predicate.hpp>
++#include <boost/asio.hpp>
++#include <chrono>
++#include <ctime>
++#include <iostream>
++#include <sdbusplus/asio/connection.hpp>
++#include <sdbusplus/asio/object_server.hpp>
++#include <sdbusplus/asio/sd_event.hpp>
++#include <sdbusplus/bus.hpp>
++#include <sdbusplus/exception.hpp>
++#include <sdbusplus/server.hpp>
++#include <sdbusplus/timer.hpp>
++#include <sensor.hpp>
++#include <systemd/sd-journal.h>
++
++
++static constexpr bool DEBUG = true;
++
++static constexpr char const* ipmiSELService =    "xyz.openbmc_project.Logging.IPMI";
++static constexpr char const* ipmiSELPath = "/xyz/openbmc_project/Logging/IPMI";
++static constexpr char const* ipmiSELAddInterface = "xyz.openbmc_project.Logging.IPMI";
++
++static const std::string ipmiSELAddMessage = "SEL Entry";
++static constexpr size_t selEvtDataMaxSize = 3;
++
++/* Api format : /xyz/openbmc_project/sensors/{sensorType}/{sensorName}   
++ * need to change array size if add element
++ */
++static constexpr std::array<const char*, 5> sensorTypes = {
++  "/xyz/openbmc_project/sensors/systemboot/MCReset",
++  "/xyz/openbmc_project/sensors/logevent/SYSTEM_EVENT_LOG",
++  "/xyz/openbmc_project/sensors/processor/THERMAL_TRIP",
++  "/xyz/openbmc_project/sensors/systemboot/SYSTEM_RESTART",
++  "/xyz/openbmc_project/sensors/systemevent/SYS_BOOT_STATUS",
++};
++
++int main()
++{
++    // setup connection to dbus
++    boost::asio::io_service io;
++    auto systemBus = std::make_shared<sdbusplus::asio::connection>(io);
++    auto objServer = sdbusplus::asio::object_server(systemBus);
++
++    // setup object server, define interface
++    systemBus->request_name("xyz.openbmc_project.SDROnlySensor");
++
++    for (std::string type : sensorTypes)
++    {
++        // add interface into sensor tree
++        std::shared_ptr<sdbusplus::asio::dbus_interface> iface =
++            objServer.add_interface(type,sensorValueInterface); 
++        double value = 0;
++        //dummy value, just identifier for sdr command
++        iface->register_property("Value", value);
++        iface->initialize();
++    }
++
++    io.run();
++
++    return 0;
++}

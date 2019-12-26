@@ -1,0 +1,8 @@
+---
+/xyz/openbmc_project/control/host0/acpi_power_state:
+    - Interface: xyz.openbmc_project.Control.Power.ACPIPowerState
+      Properties:
+         SysACPIStatus:
+             Default: ACPIPowerState::ACPI::Unknown
+         DevACPIStatus:
+             Default: ACPIPowerState::ACPI::Unknown 

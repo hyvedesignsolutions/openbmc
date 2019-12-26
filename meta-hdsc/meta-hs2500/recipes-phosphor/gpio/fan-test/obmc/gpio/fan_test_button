@@ -1,0 +1,5 @@
+DEVPATH=/dev/input/by-path/platform-gpio-keys-event
+KEY=52
+POLARITY=1
+TARGET=fan-test-button-pressed.service
+EXTRA_ARGS=--continue

@@ -1,0 +1,1 @@
+FILESEXTRAPATHS_prepend_hs9216 := "${THISDIR}/${PN}:"

@@ -1,0 +1,5 @@
+DEVPATH=/dev/input/by-path/platform-gpio-keys-event
+KEY=49
+TARGET=xyz.openbmc_project.caterr-update@caterr_assert.service
+POLARITY=1
+EXTRA_ARGS=--continue

@@ -1,0 +1,13 @@
+[Unit]
+Description=Host Reset System service
+Requires=host-gpio.service
+After=host-gpio.service
+
+[Service]
+RemainAfterExit=no
+Type=oneshot
+ExecStart=/usr/bin/env powerreset.sh
+SyslogIdentifier=powerreset.sh
+
+[Install]
+WantedBy=obmc-chassis-reset@0.target

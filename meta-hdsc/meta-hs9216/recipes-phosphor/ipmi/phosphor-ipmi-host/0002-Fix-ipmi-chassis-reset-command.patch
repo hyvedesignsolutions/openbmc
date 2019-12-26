@@ -1,0 +1,25 @@
+From c1d8fce7fdbfefa970564b92d203b7119077d187 Mon Sep 17 00:00:00 2001
+From: Jeannie Wu <jeanniew@hyvedesignsolutions.com>
+Date: Wed, 13 Nov 2019 15:14:58 +0800
+Subject: [PATCH] Fix ipmi chassis reset command
+
+---
+ chassishandler.cpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/chassishandler.cpp b/chassishandler.cpp
+index 88bf84b..aa6782b 100644
+--- a/chassishandler.cpp
++++ b/chassishandler.cpp
+@@ -1153,6 +1153,8 @@ ipmi::RspType<> ipmiChassisControl(uint8_t chassisControl)
+             break;
+ 
+         case CMD_HARD_RESET:
++            rc = initiate_state_transition(State::Host::Transition::Reset);
++            break;
+         case CMD_POWER_CYCLE:
+             // SPEC has a section that says certain implementations can trigger
+             // PowerOn if power is Off when a command to power cycle is
+-- 
+1.8.3.1
+

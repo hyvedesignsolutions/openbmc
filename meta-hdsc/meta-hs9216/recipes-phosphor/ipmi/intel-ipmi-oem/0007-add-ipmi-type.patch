@@ -1,0 +1,40 @@
+From f14f1796f2967b6fb25dcf33e59cdff634fa05a0 Mon Sep 17 00:00:00 2001
+From: Jeannie Wu <jeanniew@hyvedesignsolutions.com>
+Date: Fri, 4 Oct 2019 16:14:03 +0800
+Subject: [PATCH] add ipmi type support
+
+---
+ include/sdrutils.hpp | 12 ++++++++-
+ 1 file changed, 12 insertions(+)
+
+diff --git a/include/sdrutils.hpp b/include/sdrutils.hpp
+index a643e78..09934f7 100755
+--- a/include/sdrutils.hpp
++++ b/include/sdrutils.hpp
+@@ -172,6 +172,12 @@ enum class SensorTypeCodes : uint8_t
+     voltage = 0x2,
+     current = 0x3,
+     fan = 0x4,
++    processor = 0x07,
++    powersupply = 0x09,
++    logevent = 0x10,
++    systemevent = 0x12,
++    acpi = 0x22,
++    systemboot = 0x1d,
+     other = 0xB,
+ };
+
+@@ -181,6 +186,12 @@ const static boost::container::flat_map<const char*, SensorTypeCodes, CmpStr>
+                  {"current", SensorTypeCodes::current},
+                  {"fan_tach", SensorTypeCodes::fan},
+                  {"fan_pwm", SensorTypeCodes::fan},
++                 {"processor", SensorTypeCodes::processor},
++                 {"powersupply", SensorTypeCodes::powersupply},
++                 {"logevent", SensorTypeCodes::logevent},
++                 {"systemevent", SensorTypeCodes::systemevent},
++                 {"acpi", SensorTypeCodes::acpi},
++                 {"systemboot", SensorTypeCodes::systemboot},
+                  {"power", SensorTypeCodes::other}}};
+
+ inline static std::string getSensorTypeStringFromPath(const std::string& path)
+

@@ -1,0 +1,36 @@
+From 1598029cb6f1f11427bf902dccd89a9b83b7daf9 Mon Sep 17 00:00:00 2001
+From: Ray Lue <ray.lue@mic.com.tw>
+Date: Thu, 12 Dec 2019 19:54:41 +0800
+Subject: [PATCH] make pgood servcie don't stop polling
+
+---
+ op-pwrctl/power_control_obj.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+ mode change 100644 => 100755 op-pwrctl/power_control_obj.c
+
+diff --git a/power_control_obj.c b/power_control_obj.c
+old mode 100644
+new mode 100755
+index ada9b3b..2a7e623
+--- a/power_control_obj.c
++++ b/power_control_obj.c
+@@ -57,7 +57,8 @@ poll_pgood(gpointer user_data)
+ 		gpio_close(&g_gpio_configs.power_gpio.power_good_in);
+ 		g_print("ERROR PowerControl: GPIO open error (gpio=%s,rc=%d)\n",
+ 				g_gpio_configs.power_gpio.power_good_in.name, rc);
+-		return FALSE;
++		//Don't stop the polling
++		return true;
+ 	}
+ 	rc = gpio_read(&g_gpio_configs.power_gpio.power_good_in, &pgood_state);
+ 	gpio_close(&g_gpio_configs.power_gpio.power_good_in);
+@@ -133,7 +134,8 @@ poll_pgood(gpointer user_data)
+ 		g_print("ERROR PowerControl: GPIO read error (gpio=%s,rc=%d)\n",
+ 				g_gpio_configs.power_gpio.power_good_in.name, rc);
+ 		//return false so poll won't get called anymore
+-		return FALSE;
++		//Don't stop the polling anyhow or the entire state management system will be ruined.
++		return true;
+ 	}
+ 	//pgood is not at desired state yet
+ 	if(pgood_state != control_power_get_state(control_power) &&

@@ -1,0 +1,16 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c5537b8..dffba29 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -82,9 +82,9 @@ find_package (OpenSSL REQUIRED)
+ include_directories (${OPENSSL_INCLUDE_DIR})
+
+ add_library (zinteloemcmds
+-             SHARED src/oemcommands.cpp src/sensorcommands.cpp
++             SHARED src/sensorcommands.cpp
+              src/storagecommands.cpp src/multinodecommands.cpp
+-             src/firmware-update.cpp src/appcommands.cpp src/smbioshandler.cpp
++             src/firmware-update.cpp src/smbioshandler.cpp
+              src/smbiosmdrv2handler.cpp src/manufacturingcommands.cpp
+              src/bmccontrolservices.cpp src/bridgingcommands.cpp
+              src/ipmi_to_redfish_hooks.cpp src/chassiscommands.cpp)

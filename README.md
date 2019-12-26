@@ -30,7 +30,7 @@ sudo dnf groupinstall "C Development Tools and Libraries"
 ```
 ### 2) Download the source
 ```
-git clone git@github.com:openbmc/openbmc.git
+git clone https://github.com/hyvedesignsolutions/openbmc.git
 cd openbmc
 ```
 
@@ -44,15 +44,13 @@ then move to the next step. Additional examples can be found in the
 
 Machine | TEMPLATECONF
 --------|---------
-Palmetto | ```meta-ibm/meta-palmetto/conf```
-Zaius| ```meta-ingrasys/meta-zaius/conf```
-Witherspoon| ```meta-ibm/meta-witherspoon/conf```
-Romulus| ```meta-ibm/meta-romulus/conf```
+HS2500| ```meta-hdsc/meta-hs2500/conf```
+HS9216| ```meta-hdsc/meta-hs9216/conf```
 
 
-As an example target Romulus
+As an example target HS2500
 ```
-export TEMPLATECONF=meta-ibm/meta-romulus/conf
+export TEMPLATECONF=meta-hdsc/meta-hs2500/conf
 ```
 
 ### 4) Build
@@ -146,3 +144,6 @@ Dive deeper into OpenBMC by opening the
 - Mail: openbmc@lists.ozlabs.org [https://lists.ozlabs.org/listinfo/openbmc](https://lists.ozlabs.org/listinfo/openbmc)
 - IRC: #openbmc on freenode.net
 - Riot: [#openbmc:matrix.org](https://riot.im/app/#/room/#openbmc:matrix.org)
+# openbmc
+
+Hyve Design Solutions openbmc projects.

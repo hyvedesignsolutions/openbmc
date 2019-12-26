@@ -1,0 +1,10 @@
+[Unit]
+Description=Updage GPIOEvent %i 
+After=xyz.openbmc_project.sdronlysensor.service
+Wants=xyz.openbmc_project.sdronlysensor.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/env gpio_event %i
+SyslogIdentifier=gpio_event
+

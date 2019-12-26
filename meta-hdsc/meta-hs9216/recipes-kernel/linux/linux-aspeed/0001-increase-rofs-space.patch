@@ -1,0 +1,23 @@
+---
+ arch/arm/boot/dts/openbmc-flash-layout.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/openbmc-flash-layout.dtsi b/arch/arm/boot/dts/openbmc-flash-layout.dtsi
+index 6c26524e93e1..08a9570a8256 100644
+--- a/arch/arm/boot/dts/openbmc-flash-layout.dtsi
++++ b/arch/arm/boot/dts/openbmc-flash-layout.dtsi
+@@ -21,12 +21,12 @@ partitions {
+ 	};
+ 
+ 	rofs@c0000 {
+-		reg = <0x4c0000 0x1740000>;
++		reg = <0x4c0000 0x1940000>;
+ 		label = "rofs";
+ 	};
+ 
+ 	rwfs@1c00000 {
+-		reg = <0x1c00000 0x400000>;
++		reg = <0x1e00000 0x400000>;
+ 		label = "rwfs";
+ 	};
+ };

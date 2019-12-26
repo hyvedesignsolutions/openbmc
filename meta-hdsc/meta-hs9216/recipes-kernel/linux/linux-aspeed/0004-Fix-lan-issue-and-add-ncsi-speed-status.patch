@@ -1,0 +1,67 @@
+From dd86078846593348d089f8ff179bb6baa02f91db Mon Sep 17 00:00:00 2001
+From: Jeannie Wu <jeanniew@hyvedesignsolutions.com>
+Date: Wed, 27 Nov 2019 10:59:36 +0800
+Subject: [PATCH] Fix lan issue and add ncsi speed status
+
+---
+ drivers/net/ethernet/faraday/ftgmac100.c | 30 ++++++++++++++++++++++++++++--
+ 1 file changed, 28 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/faraday/ftgmac100.c b/drivers/net/ethernet/faraday/ftgmac100.c
+index 9ff791f..8f9a3f4 100644
+--- a/drivers/net/ethernet/faraday/ftgmac100.c
++++ b/drivers/net/ethernet/faraday/ftgmac100.c
+@@ -112,6 +112,26 @@ struct ftgmac100 {
+ 	bool is_aspeed;
+ };
+ 
++int ftgmac100_ethtool_get_link_ksettings(struct net_device *netdev,
++                                        struct ethtool_link_ksettings *cmd)
++{
++       struct phy_device *phydev = netdev->phydev;
++       struct ftgmac100 *priv = netdev_priv(netdev);
++       int retval = 0;
++
++       if (phydev) {
++               phy_ethtool_ksettings_get(phydev, cmd);
++       } else if (priv->use_ncsi) {
++               cmd->base.speed = SPEED_100;
++               cmd->base.duplex = DUPLEX_FULL;
++               cmd->base.autoneg = 0;
++       } else {
++               retval = -ENODEV;
++       }
++
++      return retval;
++}
++
+ static int ftgmac100_reset_mac(struct ftgmac100 *priv, u32 maccr)
+ {
+ 	struct net_device *netdev = priv->netdev;
+@@ -1005,7 +1025,13 @@ static void ftgmac100_adjust_link(struct net_device *netdev)
+ 	if (!phydev->link)
+ 		new_speed = 0;
+ 	else
+-		new_speed = phydev->speed;
++
++            //Hyve add to do workaround fix for 1G connect
++            //printk("Workaound to downgrade speed if speed=1G");
++            phydev->speed = (phydev->speed==SPEED_1000)? SPEED_100 : phydev->speed;
++            
++	     new_speed = phydev->speed;
++
+ 
+ 	/* Grab pause settings from PHY if configured to do so */
+ 	if (priv->aneg_pause) {
+@@ -1222,7 +1248,7 @@ static int ftgmac100_set_pauseparam(struct net_device *netdev,
+ static const struct ethtool_ops ftgmac100_ethtool_ops = {
+ 	.get_drvinfo		= ftgmac100_get_drvinfo,
+ 	.get_link		= ethtool_op_get_link,
+-	.get_link_ksettings	= phy_ethtool_get_link_ksettings,
++        .get_link_ksettings     = ftgmac100_ethtool_get_link_ksettings,
+ 	.set_link_ksettings	= phy_ethtool_set_link_ksettings,
+ 	.nway_reset		= phy_ethtool_nway_reset,
+ 	.get_ringparam		= ftgmac100_get_ringparam,
+-- 
+1.8.3.1
+

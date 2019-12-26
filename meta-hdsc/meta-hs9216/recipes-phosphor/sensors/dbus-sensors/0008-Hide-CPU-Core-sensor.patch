@@ -1,0 +1,37 @@
+From 0dcc120ec1fc1f81e845ac181b42b512e44e9fee Mon Sep 17 00:00:00 2001
+From: Jeannie Wu <jeanniew@hyvedesignsolutions.com>
+Date: Wed, 4 Dec 2019 11:58:13 +0800
+Subject: [PATCH] Hide CPU Core sensor
+
+---
+ src/CPUSensorMain.cpp | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/src/CPUSensorMain.cpp b/src/CPUSensorMain.cpp
+index 2a3ff16..3581c06 100644
+--- a/src/CPUSensorMain.cpp
++++ b/src/CPUSensorMain.cpp
+@@ -76,8 +76,8 @@ namespace fs = std::filesystem;
+ static constexpr const char* configPrefix =
+     "xyz.openbmc_project.Configuration.";
+ static constexpr std::array<const char*, 1> sensorTypes = {"XeonCPU"};
+-static constexpr std::array<const char*, 3> hiddenProps = {
+-    CPUSensor::labelTcontrol, "Tthrottle", "Tjmax"};
++static constexpr std::array<const char*, 4> hiddenProps = {
++    CPUSensor::labelTcontrol, "Tthrottle", "Tjmax", "Core"};
+ 
+ void detectCpuAsync(
+     boost::asio::deadline_timer& pingTimer,
+@@ -280,7 +280,8 @@ bool createSensors(boost::asio::io_service& io,
+             bool show = true;
+             for (const char* prop : hiddenProps)
+             {
+-                if (label == prop)
++                auto findHidden = label.find(prop);
++                if (findHidden != std::string::npos)
+                 {
+                     show = false;
+                     break;
+-- 
+1.8.3.1
+

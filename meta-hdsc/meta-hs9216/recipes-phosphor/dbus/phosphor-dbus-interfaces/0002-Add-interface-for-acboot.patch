@@ -1,0 +1,24 @@
+From: Jeannie <jeanniew@hyvedesignsolutions.com>
+Date: Fri, 22 Mar 2019 12:24:34 +0800
+Subject: [PATCH] Add interface for acboot
+
+---
+ xyz/openbmc_project/Common/ACBoot.interface.yaml | 9 ++++++++++++++++++++
+ 2 files changed, 9 insertions(+)
+ create mode 100644 xyz/openbmc_project/Common/ACBoot.interface.yaml
+
+diff --git a/xyz/openbmc_project/Common/ACBoot.interface.yaml b/xyz/openbmc_project/Common/ACBoot.interface.yaml
+new file mode 100644
+index 0000000..d5c35bc
+--- /dev/null
++++ b/xyz/openbmc_project/Common/ACBoot.interface.yaml
+@@ -0,0 +1,9 @@
++description: >
++    This defines acboot status
++
++properties:
++    - name: ACBoot
++      type: string
++      default: Unknown
++      description: >
++          The AC Reboot status.

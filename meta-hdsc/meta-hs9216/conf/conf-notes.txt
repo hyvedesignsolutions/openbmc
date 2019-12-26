@@ -1,0 +1,2 @@
+Common targets for hs9216 are:
+    obmc-phosphor-image

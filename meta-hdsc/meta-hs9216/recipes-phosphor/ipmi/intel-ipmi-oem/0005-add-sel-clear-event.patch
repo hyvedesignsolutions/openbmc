@@ -1,0 +1,74 @@
+From c4680211a6a32131d5a88460873bbedac2e2d076 Mon Sep 17 00:00:00 2001
+From: Jeannie Wu <jeanniew@hyvedesignsolutions.com>
+Date: Mon, 4 Nov 2019 18:11:25 +0800
+Subject: [PATCH] add sel clear event
+
+---
+ src/storagecommands.cpp | 36 ++++++++++++++++++++++++++++++++++--
+ 1 file changed, 34 insertions(+), 2 deletions(-)
+
+diff --git a/src/storagecommands.cpp b/src/storagecommands.cpp
+index 5133098..c02e828 100644
+--- a/src/storagecommands.cpp
++++ b/src/storagecommands.cpp
+@@ -680,8 +680,9 @@ ipmi::RspType<uint8_t,  // SEL version
+     uint32_t eraseTimeStamp = intel_oem::ipmi::sel::erase_time::get();
+     constexpr uint8_t operationSupport =
+         intel_oem::ipmi::sel::selOperationSupport;
+-    constexpr uint16_t freeSpace =
+-        0xffff; // Spec indicates that more than 64kB is free
++    
++    uint16_t countspace = entries * 16;
++    uint16_t freeSpace = 0xFFFE - countspace; // Spec indicates that more than 64kB is free
+ 
+     return ipmi::responseSuccess(selVersion, entries, freeSpace, addTimeStamp,
+                                  eraseTimeStamp, operationSupport);
+@@ -938,10 +939,40 @@ ipmi::RspType<uint16_t> ipmiStorageAddSELEntry(
+         recordID, recordType, timestamp, generatorID, evmRev, sensorType,
+         sensorNum, eventType, eventData1, eventData2, eventData3);
+ 
++   
++
+     uint16_t responseID = 0xFFFF;
+     return ipmi::responseSuccess(responseID);
+ }
+ 
++static void addClearSEL()
++{
++    uint16_t genid = 0x20;
++        bool assert=1;
++        std::vector<uint8_t> eventData(3, 0xFF);
++        eventData[0]=0x2;  //Log area reset/cleared
++        static constexpr char const* ipmiSELService =    "xyz.openbmc_project.Logging.IPMI";
++        static constexpr char const* ipmiSELPath = "/xyz/openbmc_project/Logging/IPMI";
++        static constexpr char const* ipmiSELAddInterface = "xyz.openbmc_project.Logging.IPMI";
++        static const std::string ipmiSELAddMessage = "SEL Entry";
++        boost::asio::io_service io;
++        auto systemBus = std::make_shared<sdbusplus::asio::connection>(io);
++        sdbusplus::message::message writeSEL = systemBus->new_method_call(
++                                 ipmiSELService, ipmiSELPath, ipmiSELAddInterface, "IpmiSelAdd");
++        writeSEL.append(ipmiSELAddMessage,  std::string("/xyz/openbmc_project/sensors/logevent/SYSTEM_EVENT_LOG"), eventData, assert, genid);
++       try
++       {
++            systemBus->call(writeSEL);
++       }
++       catch (sdbusplus::exception_t& e)
++       {
++           std::cerr << "call IpmiSelAdd failed\n";
++       }
++    return;
++
++}
++
++
+ ipmi::RspType<uint8_t> ipmiStorageClearSEL(ipmi::Context::ptr ctx,
+                                            uint16_t reservationID,
+                                            const std::array<uint8_t, 3>& clr,
+@@ -1004,6 +1035,7 @@ ipmi::RspType<uint8_t> ipmiStorageClearSEL(ipmi::Context::ptr ctx,
+         phosphor::logging::log<phosphor::logging::level::ERR>(e.what());
+     }
+ 
++    addClearSEL();
+     return ipmi::responseSuccess(ipmi::sel::eraseComplete);
+ }
+ 

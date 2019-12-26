@@ -1,0 +1,13 @@
+diff --git a/src/storagecommands.cpp b/src/storagecommands.cpp
+index 39405c5..5133098 100644
+--- a/src/storagecommands.cpp
++++ b/src/storagecommands.cpp
+@@ -33,7 +33,7 @@
+
+ namespace intel_oem::ipmi::sel
+ {
+-static const std::filesystem::path selLogDir = "/var/log";
++static const std::filesystem::path selLogDir = "/var";
+ static const std::string selLogFilename = "ipmi_sel";
+
+ static int getFileTimestamp(const std::filesystem::path& file)

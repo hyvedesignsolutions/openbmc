@@ -1,0 +1,54 @@
+---
+ board/aspeed/ast-g5/ast-g5.c | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+
+diff --git a/board/aspeed/ast-g5/ast-g5.c b/board/aspeed/ast-g5/ast-g5.c
+index e67a4bf..d9e34f6 100644
+--- a/board/aspeed/ast-g5/ast-g5.c
++++ b/board/aspeed/ast-g5/ast-g5.c
+@@ -14,8 +14,35 @@
+ #include <asm/arch/ast-sdmc.h>
+ #include <asm/io.h>
+ 
++//Hyve++
++#include <asm/arch/regs-scu.h>
++//++ Hyve
++
+ DECLARE_GLOBAL_DATA_PTR;
+ 
++//Hyve ++
++void reset_phy(void) {
++        
++	//Disable SD1/SD2 function pin  (SCU90, bit0: SD1 bit1:SD)
++	*(volatile ulong *)(0x1E789090) &= ~(0x00000003);
++   
++
++	// Set GPIO D5 as output        
++	*(volatile ulong *)(0x1E780004) |= 0x20000000;        
++
++
++	//Pull low GPIO D5 PHY reset pin        
++	*(volatile ulong *)(0x1E780000) &= ~(0x20000000);
++
++
++	 udelay(30 * 1000);
++
++	//Pull high GPIO D5 PHY reset pin
++	*(volatile ulong *)(0x1E780000) |= 0x20000000;
++	udelay(50*1000);
++}
++//++ Hyve
++
+ int board_init(void)
+ {
+ 	gd->bd->bi_boot_params = CONFIG_SYS_SDRAM_BASE + 0x100;
+@@ -36,6 +63,9 @@ int dram_init(void)
+ #ifdef CONFIG_FTGMAC100
+ int board_eth_init(bd_t *bd)
+ {
++//Hyve++
++        reset_phy();
++//++Hyve//
+         return ftgmac100_initialize(bd);
+ }
+ #endif
