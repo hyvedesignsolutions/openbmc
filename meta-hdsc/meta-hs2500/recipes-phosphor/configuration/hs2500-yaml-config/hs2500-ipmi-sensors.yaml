@@ -376,3 +376,35 @@
     sensorType: 8
     serviceInterface: org.freedesktop.DBus.Properties
     unit: xyz.openbmc_project.Sensor.Value.Unit.Watts
+0x19: &fan_tach
+  entityID: 29
+  entityInstance: 1
+  sensorType: 0x04
+  path: /xyz/openbmc_project/sensors/fan_tach/fan0
+  sensorReadingType: 0x01
+  multiplierM: 100
+  offsetB: 0
+  bExp: 0
+  unit: xyz.openbmc_project.Sensor.Value.Unit.RPMS
+  scale: 0
+  rExp: 0
+  serviceInterface: org.freedesktop.DBus.Properties
+  readingType: readingData
+  interfaces:
+    xyz.openbmc_project.Sensor.Value:
+      Value:
+        Offsets:
+          0xFF:
+            type: int64_t
+0x20:
+  <<: *fan_tach
+  entityInstance: 2
+  path: /xyz/openbmc_project/sensors/fan_tach/fan1
+0x21:
+  <<: *fan_tach
+  entityInstance: 3
+  path: /xyz/openbmc_project/sensors/fan_tach/fan2
+0x22:
+  <<: *fan_tach
+  entityInstance: 4
+  path: /xyz/openbmc_project/sensors/fan_tach/fan3
