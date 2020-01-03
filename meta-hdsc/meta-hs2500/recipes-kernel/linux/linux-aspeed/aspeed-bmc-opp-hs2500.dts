@@ -310,6 +310,11 @@
 
 &i2c8 {
 	status = "okay";
+
+        tmp75@4a {
+                 compatible = "st,stlm75";
+                 reg = <0x4a>;
+        };
 };
 
 &i2c9 {
@@ -367,17 +372,6 @@
 
 &i2c12 {
 	status = "okay";
-
-        tmp75@4a {
-                 compatible = "st,stlm75";
-                 reg = <0x4a>;
-        };
-
-        eeprom@51 {
-		compatible = "st,24c64", "atmel,24c64";
-		reg = <0x51>;
-		pagesize = <32>;
-	};
 };
 
 &gpio {
