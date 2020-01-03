@@ -315,6 +315,12 @@
                  compatible = "st,stlm75";
                  reg = <0x4a>;
         };
+
+        eeprom@51 {
+		compatible = "st,24c64", "atmel,24c64";
+		reg = <0x51>;
+		pagesize = <32>;
+	};
 };
 
 &i2c9 {
