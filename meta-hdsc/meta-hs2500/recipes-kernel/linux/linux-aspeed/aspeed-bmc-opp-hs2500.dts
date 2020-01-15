@@ -440,7 +440,15 @@
 	status = "okay";
 };
 
-&vhub {
+&ehci0 {
+	status = "okay";
+};
+
+&ehci1 {
+	status = "okay";
+};
+
+&uhci {
 	status = "okay";
 };
 
