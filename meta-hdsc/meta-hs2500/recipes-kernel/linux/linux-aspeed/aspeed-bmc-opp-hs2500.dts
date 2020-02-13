@@ -237,18 +237,39 @@
 };
 
 &uart1 {
-	/* Rear RS-232 connector */
+	/* UART1 HEADER */
 	status = "okay";
 
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_txd1_default
-			&pinctrl_rxd1_default
-			&pinctrl_nrts1_default
-			&pinctrl_ndtr1_default
-			&pinctrl_ndsr1_default
-			&pinctrl_ncts1_default
-			&pinctrl_ndcd1_default
-			&pinctrl_nri1_default>;
+			&pinctrl_rxd1_default>;
+};
+
+&uart2 {
+	/* UART2 HEADER */
+	status = "okay";
+
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_txd2_default
+			&pinctrl_rxd2_default>;
+};
+
+&uart3 {
+	/* UART3 HEADER */
+	status = "okay";
+
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_txd3_default
+			&pinctrl_rxd3_default>;
+};
+
+&uart4 {
+	/* UART4 HEADER */
+	status = "okay";
+
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_txd4_default
+			&pinctrl_rxd4_default>;
 };
 
 &uart5 {
