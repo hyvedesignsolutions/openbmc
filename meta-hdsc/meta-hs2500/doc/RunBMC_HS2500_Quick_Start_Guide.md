@@ -397,3 +397,36 @@ or an error message:
              "message": "400 Bad Request",
              "status": "error"
          }
+
+### UART Interface
+There are 5 UART interface on the HSBUV, mapped to 5 individual UART headers.
+The UART2 and UART5 also have extra RJ45 connector and microUSB connector selectable by dip switch.
+This is the mapping table of each UART interface.
+
+Linux Device Name | UART Header | RJ45 Port | MicroUSB Port | DIP Switch |
+-----|--------|-----------|---------------|------------|
+/dev/ttyS0 | UART 1 | NA | NA | NA|
+/dev/ttyS1 | UART 2 | UART_CONSOLE-1 | MICRO_USB_UART2 | SW2001 |
+/dev/ttyS2 | UART 3 | NA | NA | NA|
+/dev/ttyS3 | UART 4 | NA | NA | NA|
+/dev/ttyS4 | UART 5 | UART_CONSOLE-2 | MICRO_USB_UART5 | SW2002 |
+
+To test UART interface, it is suggested to use a loop back wire connection between UART TX and RX.
+For example to test UART3:
+
+Set the baud rate to 115200
+```
+root@hs2500:~# stty -F /dev/ttyS2 115200
+```
+Disable echo
+```
+root@hs2500:~# stty -F /dev/ttyS2 -echo
+```
+Get UART data at background
+```
+root@hs2500:~# cat /dev/ttyS2 &
+```
+Send data and see if the same data returned through loop back connection
+```
+root@hs2500:~# echo hello > /dev/ttyS2
+```
