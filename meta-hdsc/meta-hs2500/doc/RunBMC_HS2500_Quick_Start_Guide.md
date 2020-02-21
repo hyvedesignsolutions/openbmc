@@ -10,7 +10,7 @@ You will see the login prompt for openbmc console :
 ```
 Phosphor OpenBMC (Phosphor OpenBMC Project Reference Distro) 0.1.0 hs2500 ttyS4
 
-hs2500 login: 
+hs2500 login:
 ```
 By default the login is 'root', password is '0penBmc'
 
@@ -18,8 +18,8 @@ By default the login is 'root', password is '0penBmc'
 Phosphor OpenBMC (Phosphor OpenBMC Project Reference Distro) 0.1.0 hs2500 ttyS4
 
 hs2500 login: root
-Password: 0penBmc 
-root@hs2500:~# 
+Password: 0penBmc
+root@hs2500:~#
 ```
 
 ## Set MAC address
@@ -41,7 +41,7 @@ root@hs2500:~# ip address
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
     inet 127.0.0.1/8 scope host lo
        valid_lft forever preferred_lft forever
-    inet6 ::1/128 scope host 
+    inet6 ::1/128 scope host
        valid_lft forever preferred_lft forever
 2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast qlen 1000
     link/ether 00:11:22:33:44:77 brd ff:ff:ff:ff:ff:ff
@@ -49,7 +49,7 @@ root@hs2500:~# ip address
        valid_lft forever preferred_lft forever
     inet 192.168.1.74/24 brd 192.168.1.255 scope global dynamic eth0
        valid_lft 86374sec preferred_lft 86374sec
-    inet6 fe80::211:22ff:fe33:4477/64 scope link 
+    inet6 fe80::211:22ff:fe33:4477/64 scope link
        valid_lft forever preferred_lft forever
 3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast qlen 1000
     link/ether 00:11:22:33:44:66 brd ff:ff:ff:ff:ff:ff
@@ -57,7 +57,7 @@ root@hs2500:~# ip address
        valid_lft forever preferred_lft forever
     inet 192.168.1.57/24 brd 192.168.1.255 scope global dynamic eth1
        valid_lft 86373sec preferred_lft 86373sec
-    inet6 fe80::211:22ff:fe33:4466/64 scope link 
+    inet6 fe80::211:22ff:fe33:4466/64 scope link
        valid_lft forever preferred_lft forever
 4: sit0@NONE: <NOARP,UP,LOWER_UP> mtu 1480 qdisc noqueue qlen 1000
     link/sit 0.0.0.0 brd 0.0.0.0
@@ -77,7 +77,7 @@ root@hs2500:~# ip address show eth0
        valid_lft 85432sec preferred_lft 85432sec
     inet 192.168.1.75/24 scope global secondary eth0
        valid_lft forever preferred_lft forever
-    inet6 fe80::211:22ff:fe33:4455/64 scope link 
+    inet6 fe80::211:22ff:fe33:4455/64 scope link
        valid_lft forever preferred_lft forever
 ```
 
@@ -122,13 +122,13 @@ There are 12 I2C buses on the HS2500. The 'i2cdetect' can scan all available dev
 ```
 root@hs2500:~# i2cdetect -y 10
      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-00:          -- -- -- -- -- -- -- -- -- -- -- -- -- 
-10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-20: -- 21 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-30: -- -- -- -- -- -- -- -- 38 -- -- -- -- -- -- -- 
-40: 40 41 -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+00:          -- -- -- -- -- -- -- -- -- -- -- -- --
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+20: -- 21 -- -- -- -- -- -- -- -- -- -- -- -- -- --
+30: -- -- -- -- -- -- -- -- 38 -- -- -- -- -- -- --
+40: 40 41 -- -- -- -- -- -- -- -- -- -- -- -- -- --
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 70: -- -- -- -- -- -- -- --
 ```
 
@@ -184,7 +184,7 @@ Channel 4 ~ 7 are adjustable by divider.
 You can read ADC voltage from any channel. For example, to read voltage from ADC channel 2
 
 ```
-root@hs2500:~# cat /sys/class/hwmon/hwmon1/in2_input 
+root@hs2500:~# cat /sys/class/hwmon/hwmon1/in2_input
 1694
 ```
 
@@ -204,7 +204,7 @@ There 4 fan tach and PWM on the HSBUV. All of them can be read/write by sysfs in
 For example, to read fan1 speed :
 
 ```
-root@hs2500:~# cat /sys/class/hwmon/hwmon0/fan1_input 
+root@hs2500:~# cat /sys/class/hwmon/hwmon0/fan1_input
 23993
 ```
 
@@ -429,4 +429,30 @@ root@hs2500:~# cat /dev/ttyS2 &
 Send data and see if the same data returned through loop back connection
 ```
 root@hs2500:~# echo hello > /dev/ttyS2
+```
+
+### USB Host Interface
+There are two USB host ports on HSBUV, each of them can support FAT32 USB sticks
+- While connecting a USB stick, journalctl shows up the disk information:
+``` shell
+[ 3684.030344] usb 1-1: new high-speed USB device number 3 using ehci-platform
+[ 3684.088452] usb-storage 1-1:1.0: USB Mass Storage device detected
+[ 3684.112105] scsi host0: usb-storage 1-1:1.0
+[ 3685.183613] scsi 0:0:0:0: Direct-Access     SanDisk  Cruzer           1.03 PQ: 0 ANSI: 2
+[ 3685.222811] sd 0:0:0:0: [sda] 15633408 512-byte logical blocks: (8.00 GB/7.45 GiB)
+[ 3685.237621] sd 0:0:0:0: [sda] Write Protect is off
+[ 3685.255248] sd 0:0:0:0: [sda] No Caching mode page found
+[ 3685.260760] sd 0:0:0:0: [sda] Assuming drive cache: write through
+[ 3685.296233]  sda: sda1 sda2
+[ 3685.311536] sd 0:0:0:0: [sda] Attached SCSI removable disk
+```
+
+- Mount the file system and list all files:
+``` shell
+root@hs2500:~# mkdir ./usb
+root@hs2500:~# mount /dev/sda1 ./usb/
+root@hs2500:~# ls -al ./usb/
+drwxr-xr-x    3 root     root         16384 Jan  1  1970 .
+drwx------    1 root     root             0 Feb 20 09:39 ..
+drwxr-xr-x    3 root     root          2048 Aug 15  2019 EFI
 ```
