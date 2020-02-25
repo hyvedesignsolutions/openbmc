@@ -456,3 +456,32 @@ drwxr-xr-x    3 root     root         16384 Jan  1  1970 .
 drwx------    1 root     root             0 Feb 20 09:39 ..
 drwxr-xr-x    3 root     root          2048 Aug 15  2019 EFI
 ```
+
+### Host SPI Interface
+HS2500 has 2 individual HOST SPI interface, SPI1 and SPI2.
+The SPI2 is connected to SPI2_HEADER on the HSBUV.
+However, there is a build-in 32MB NOR flash connected with SPI1.
+By default, it is mapped to /dev/mtd6 in the root file system.
+The flash* commands can be used to program the flash memory.
+
+- To erase all flash memory contents:
+
+``` shell
+root@hs2500:/tmp# flash_eraseall /dev/mtd6
+Erasing 64 Kibyte @ 2000000 - 100% complete.
+```
+
+- You can also use flashcp to erase and program the flash memory:
+
+``` shell
+root@hs2500:~# cd /tmp/
+root@hs2500:/tmp# tftp -g -r host-image 10.19.84.86
+root@hs2500:/tmp# ls -l ./host-image
+-rw-r--r--    1 root     root      33554432 Feb 25 07:35 ./host-image
+
+root@hs2500:/tmp# flashcp -v ./host-image /dev/mtd6
+Erasing block: 512/512 (100%)
+Writing kb: 32768/32768 (100%)
+Verifying kb: 32768/32768 (100%)
+
+```
