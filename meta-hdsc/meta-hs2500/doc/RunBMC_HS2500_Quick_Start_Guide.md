@@ -459,9 +459,16 @@ drwxr-xr-x    3 root     root          2048 Aug 15  2019 EFI
 
 ### Host SPI Interface
 HS2500 has 2 individual HOST SPI interface, SPI1 and SPI2.
-The SPI2 is connected to SPI2_HEADER on the HSBUV.
-However, there is a build-in 32MB NOR flash connected with SPI1.
+There is a build-in 32MB NOR flash connected with SPI1.
 By default, it is mapped to /dev/mtd6 in the root file system.
+Also, another flash socket is available and connected to SPI1 as pass-through source.
+
+The SPI2 is connected to SPI2_HEADER on the HSBUV.
+An easy way to verify the SPI2 and SPI1 flash socket is to link SPI2_HEADER with
+SYS SPI HEADER.
+By this way, the SPI2 master can program the SPI1 flash socket directlly,
+and SPI1 flash socket is mapped to /dev/mtd7.
+
 The flash* commands can be used to program the flash memory.
 
 - To erase all flash memory contents:
