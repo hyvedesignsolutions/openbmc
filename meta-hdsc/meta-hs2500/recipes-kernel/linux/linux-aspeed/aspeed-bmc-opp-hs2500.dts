@@ -507,3 +507,19 @@
 	status = "okay";
 	memory-region = <&video_engine_memory>;
 };
+
+&peci0 {
+	status = "okay";
+
+        intel-peci-cputemp@30 {
+		compatible = "intel,peci-client";
+		reg = <0x30>;
+		status = "okay";
+	};
+
+        intel-peci-cputemp@31 {
+		compatible = "intel,peci-client";
+		reg = <0x31>;
+		status = "okay";
+	};
+};
