@@ -25,3 +25,13 @@ ITEMS += "iio-hwmon-1_8v.conf \
 
 ENVS = "obmc/hwmon/{0}"
 SYSTEMD_ENVIRONMENT_FILE_${PN}_append_hs2500 = " ${@compose_list(d, 'ENVS', 'ITEMS')}"
+
+# INTEL PECI sensors
+PECINAMES = " \
+        0-30/peci-cputemp.0 \
+        0-31/peci-cputemp.1 \
+        "
+PECIITEMSFMT = "devices/platform/ahb/ahb--apb/ahb--apb--bus@1e78b000/1e78b000.peci-bus/peci-0/{0}.conf"
+PECIITEMS = "${@compose_list(d, 'PECIITEMSFMT', 'PECINAMES')}"
+PECIENVS = "obmc/hwmon/{0}"
+SYSTEMD_ENVIRONMENT_FILE_${PN}_append_hs2500 = " ${@compose_list(d, 'PECIENVS', 'PECIITEMS')}"
