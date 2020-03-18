@@ -492,3 +492,99 @@ Writing kb: 32768/32768 (100%)
 Verifying kb: 32768/32768 (100%)
 
 ```
+
+### INTEL PECI CPU Sensors
+The PECI interface is used by INTEL processors to let BMC get CPU temperature readings.
+On HSBUV, PECI interface is maped to header J708.
+
+Header Pin Number | Signal Name |
+------------------|-------------|
+2 | PECIVDD |
+3 | PECI |
+
+The firmware implementation assume you have 2 INTEL processors connect to the PECI.
+With the default PECI address 0x30 and 0x31.
+
+Processor | PECI Address |
+----------|--------------|
+CPU 0 | 0x30 |
+CPU 1 | 0x31 |
+
+To get the reading of host processor, it is important to power on the processor BEFORE booting the BMC.
+It is because BMC only probe the PECI clients while booting.
+
+To Get the sensor value, you should know the dbus service name of the sensor first.
+
+- Get sensor service name by ObjectMapper GetObject method.
+``` shell
+root@hs2500:~# dbus-send --system --print-reply \
+--dest=xyz.openbmc_project.ObjectMapper \
+/xyz/openbmc_project/object_mapper \
+xyz.openbmc_project.ObjectMapper.GetObject \
+string:"/xyz/openbmc_project/sensors/temperature/Die_CPU0" array:string:
+
+method return time=8413.931456 sender=:1.44 -> destination=:1.140 serial=1821 reply_serial=2
+       array [
+          dict entry(
+             string "xyz.openbmc_project.Hwmon-812814171.Hwmon1"
+             array [
+                string "org.freedesktop.DBus.Introspectable"
+                string "org.freedesktop.DBus.Peer"
+                string "org.freedesktop.DBus.Properties"
+                string "xyz.openbmc_project.Sensor.Threshold.Critical"
+                string "xyz.openbmc_project.Sensor.Value"
+                string "xyz.openbmc_project.State.Decorator.OperationalStatus"
+             ]
+          )
+       ]
+```
+
+Now, you know the service name of sensor Die_CPU0, we can use it to get all value of Die_CPU0
+
+- Get All properties
+
+``` shell
+root@hs2500:~# dbus-send --system --print-reply \
+--dest=xyz.openbmc_project.Hwmon-812814171.Hwmon1 \
+/xyz/openbmc_project/sensors/temperature/Die_CPU0 \
+org.freedesktop.DBus.Properties.GetAll \
+string:"xyz.openbmc_project.Sensor.Value"
+
+method return time=7366.310516 sender=:1.69 -> destination=:1.139 serial=160 reply_serial=2
+       array [
+          dict entry(
+             string "Value"
+             variant             int64 31469
+          )
+          dict entry(
+             string "MaxValue"
+             variant             int64 0
+          )
+          dict entry(
+             string "MinValue"
+             variant             int64 0
+          )
+          dict entry(
+             string "Unit"
+             variant             string "xyz.openbmc_project.Sensor.Value.Unit.DegreesC"
+          )
+          dict entry(
+             string "Scale"
+             variant             int64 -3
+          )
+       ]
+
+```
+
+Sensor Name |
+------------|
+Die_CPU0 |
+DTS_CPU0 |
+Tcontrol_CPU0 |
+Tjmax_CPU0 |
+Core_x_CPU0 (x = 0 ~ 15) |
+Die_CPU1 |
+DTS_CPU1 |
+Tcontrol_CPU1 |
+Tjmax_CPU1 |
+Core_x_CPU1 (x = 0 ~ 15) |
