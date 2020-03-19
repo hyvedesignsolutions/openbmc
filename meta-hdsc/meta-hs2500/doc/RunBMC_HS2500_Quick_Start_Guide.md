@@ -588,3 +588,14 @@ DTS_CPU1 |
 Tcontrol_CPU1 |
 Tjmax_CPU1 |
 Core_x_CPU1 (x = 0 ~ 15) |
+
+### LPC Interface and KCS Protocol
+The LPC interface is used by most INTEL platform as system interface between Host and BMC.
+KCS is the primary in-band IPMI protocol between INTEL processor BIOS and BMC.
+LPC interface is maped to J706 on HSBUV.
+It is much easier to test the LPC and KCS by using in-band IPMI commands, and RHEL / CentOS 8 is recommend host OS.
+
+After connect the host LPC interface with J706, power on the host.
+- If BIOS support IPMI commands, you may get correct BMC version information or self test results shows on BIOS.
+- Boot into RedHat/CentOS 8, make sure it have /dev/ipmi0 device file.
+- Send some standard IPMI commands such as ipmitool mc info.
