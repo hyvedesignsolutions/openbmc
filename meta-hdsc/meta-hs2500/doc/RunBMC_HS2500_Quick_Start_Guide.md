@@ -599,3 +599,8 @@ After connect the host LPC interface with J706, power on the host.
 - If BIOS support IPMI commands, you may get correct BMC version information or self test results shows on BIOS.
 - Boot into RedHat/CentOS 8, make sure it have /dev/ipmi0 device file.
 - Send some standard IPMI commands such as ipmitool mc info.
+
+### OpenBMC Web User Interface
+The OpenBMC WebUI is a Web-based user interface for the OpenBMC firmware stack.
+Enter the https:// BMC Host or BMC IP address, username, and password.
+The default username and password are root/0penBmc.
