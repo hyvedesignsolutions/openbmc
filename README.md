@@ -116,24 +116,13 @@ get faster results by using the mailing list or IRC.
 
 **Feature List**
 * Host management: Power, Cooling, LEDs, Inventory, Events, Watchdog
-* Full IPMI 2.0 Compliance with DCMI
-* Code Update Support for multiple BMC/BIOS images
+* IPMI 2.0 Compliance
+* BMC Code Update Support
 * Web-based user interface
 * REST interfaces
 * D-Bus based interfaces
 * SSH based SOL
-* Remote KVM
-* Hardware Simulation
-* Automated Testing
 * User management
-* Virtual media
-
-**Features In Progress**
-* OpenCompute Redfish Compliance
-* Verified Boot
-
-**Features Requested but need help**
-* OpenBMC performance monitoring
 
 
 ## Finding out more
@@ -141,21 +130,9 @@ get faster results by using the mailing list or IRC.
 Dive deeper into OpenBMC by opening the
 [docs](https://github.com/openbmc/docs) repository.
 
-## Technical Steering Committee
-
-The Technical Steering Committee (TSC) guides the project. Members are:
-
- * Brad Bishop (chair), IBM
- * Nancy Yuen, Google
- * Sai Dasari, Facebook
- * James Mihm, Intel
- * Sagar Dharia, Microsoft
- * Supreeth Venkatesh, Arm
 
 ## Contact
-- Mail: openbmc@lists.ozlabs.org [https://lists.ozlabs.org/listinfo/openbmc](https://lists.ozlabs.org/listinfo/openbmc)
-- IRC: #openbmc on freenode.net
-- Riot: [#openbmc:matrix.org](https://riot.im/app/#/room/#openbmc:matrix.org)
-# openbmc
+- Mail: bradc@hyvedesignsolutions.com
+
 
 Hyve Design Solutions openbmc projects.
